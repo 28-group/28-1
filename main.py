@@ -1,1 +1,1 @@
-print("Hello, Git!")
+print("Hello from VS Code GitHub extension!")
