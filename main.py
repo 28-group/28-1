@@ -10,12 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 重新规划组件大小和位置
+# 自定义CSS - 明确三个层级
 st.markdown(
     """
     <style>
-    /* ==================== 基础布局设置 ==================== */
-    /* 彻底禁止页面滑动 - 确保整个应用固定不滚动 */
+    /* 彻底禁止页面滑动 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -43,263 +42,211 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* ==================== 三层级布局系统 ==================== */
-    
-    /* 
-    第1层级：灰色背景层 
-    作用：作为整个应用的底层背景，相当于"桌子"
-    特性：固定定位，覆盖整个视口，最低层级(z-index: 1)
-    */
+    /* 第1层级：灰色背景层 */
     .layer-0 {
-        background-color: #808080;        /* 灰色背景 */
-        position: fixed;                  /* 固定定位，不随页面滚动 */
+        background-color: #808080;
+        position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;                     /* 覆盖整个视口宽度 */
-        height: 100vh;                    /* 覆盖整个视口高度 */
-        z-index: 1;                       /* 最低层级，作为背景 */
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
     }
     
-    /* 
-    第2层级：白色工作区 
-    作用：作为主要内容容器，相当于"桌布"
-    特性：居中显示，白色背景，带阴影和圆角，中间层级(z-index: 2)
-    */
+    /* 第2层级：白色工作区 */
     .layer-1 {
-        background-color: white;          /* 白色背景 */
-        border-radius: 15px;              /* 圆角设计 */
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);  /* 阴影效果增加层次感 */
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         position: fixed;
-        top: 50%;                         /* 垂直居中 */
-        left: 50%;                        /* 水平居中 */
-        transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 70%;                       /* 占据视口宽度的70% */
-        height: 70%;                      /* 占据视口高度的70% */
-        z-index: 2;                       /* 中间层级，在灰色背景之上 */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 70%;
+        z-index: 2;
+        padding: 2%;
+        display: flex;
+        flex-direction: column;
     }
     
-    /* 
-    第3层级：透明组件容器 
-    作用：承载所有交互组件的透明层，相当于"菜肴摆放区"
-    特性：与第2层级完全重合但透明，承载所有UI组件，最高层级(z-index: 3)
-    */
+    /* 第3层级：透明组件容器 - 大小位置与第2层级完全一致 */
     .layer-2 {
         position: fixed;
-        top: 50%;                         /* 与第2层级相同的垂直位置 */
-        left: 50%;                        /* 与第2层级相同的水平位置 */
-        transform: translate(-50%, -50%); /* 与第2层级相同的居中方式 */
-        width: 70%;                       /* 与第2层级相同的宽度 */
-        height: 70%;                      /* 与第2层级相同的高度 */
-        z-index: 3;                       /* 最高层级，在所有内容之上 */
-        padding: 3%;                      /* 内边距，为内部组件提供呼吸空间 */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 70%;
+        z-index: 3;
+        padding: 2%;
         display: flex;
-        flex-direction: column;           /* 垂直弹性布局，便于组件排列 */
-        background-color: transparent;    /* 完全透明，不遮挡下层内容 */
-        pointer-events: auto;             /* 确保可以接收鼠标事件 */
-        box-sizing: border-box;           /* 盒模型：padding包含在总尺寸内 */
+        flex-direction: column;
+        background-color: transparent; /* 完全透明 */
+        pointer-events: auto; /* 确保可以交互 */
     }
     
-    /* ==================== 第3层级内部组件样式 ==================== */
-    
-    /* 标题区域 - 位于第3层级顶部 */
+    /* 标题区域 - 在第3层级 */
     .title-section {
         text-align: center;
-        margin-bottom: 3%;                /* 与下方内容的间距 */
-        padding-bottom: 2%;               /* 底部内边距 */
-        border-bottom: 1px solid #f0f0f0; /* 底部边框线，视觉分隔 */
-        width: 100%;                      /* 占据容器全宽 */
-        height: 8%;                       /* 固定高度，占容器高度的8% */
+        margin-bottom: 2%;
+        padding-bottom: 1%;
+        border-bottom: 1px solid #f0f0f0;
     }
     
     .main-title {
-        font-size: 20vw;                 /* 响应式字体大小，基于视口宽度 */
+        font-size: 1.8vw;
         font-weight: bold;
-        color: #ff69b4;                   /* 粉红色标题 */
+        color: #ff69b4;
         margin: 0;
     }
     
-    /* 图片框容器 - 三个图片框的水平排列容器 */
+    /* 图片框容器 - 在第3层级 */
     .image-container {
-        flex: 1;                          /* 弹性填充剩余空间 */
+        flex: 1;
         display: flex;
-        justify-content: space-between;   /* 三个框均匀分布 */
+        justify-content: center;
         align-items: center;
-        gap: 3%;                         /* 框之间的间距 */
-        padding: 0 2%;                   /* 左右内边距 */
-        width: 100%;                     /* 占据容器全宽 */
-        box-sizing: border-box;
-        height: 60%;                     /* 固定高度，占容器高度的60% */
+        gap: 2%;
+        padding: 2%;
     }
     
-    /* 单个图片框样式 - 三个框的统一样式 */
+    /* 单个图片框样式 - 在第3层级 */
     .image-box {
-        width: 26%;                      /* 宽度占容器的26% */
-        height: 80%;                     /* 高度占图片容器高度的80% */
-        border: 2px dashed #4CAF50;      /* 绿色虚线边框 */
-        border-radius: 12px;             /* 圆角设计 */
+        width: 28%;
+        aspect-ratio: 3/2;
+        border: 2px dashed #4CAF50;
+        border-radius: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #f1f8e9;       /* 浅绿色背景 */
-        transition: all 0.3s ease;       /* 悬停动画效果 */
-        padding: 3%;                     /* 内边距 */
+        background-color: #f1f8e9;
+        transition: all 0.3s ease;
+        padding: 1%;
         position: relative;
-        box-sizing: border-box;          /* 确保padding不增加总尺寸 */
     }
     
     .image-box:hover {
-        border-color: #388E3C;           /* 悬停时边框颜色加深 */
-        background-color: #dcedc8;       /* 悬停时背景色加深 */
-        transform: translateY(-3px);     /* 悬停时上浮效果 */
+        border-color: #388E3C;
+        background-color: #dcedc8;
     }
     
     .box-text {
-        color: #2E7D32;                  /* 深绿色文字 */
-        font-size: 1.2vw;                /* 响应式字体大小 */
+        color: #2E7D32;
+        font-size: 1vw;
         text-align: center;
-        margin-top: 10px;                /* 与上方内容的间距 */
+        margin-top: 8px;
     }
     
-    /* 运算符样式 - 加号和等号 */
+    /* 加号样式 - 在第3层级 */
     .operator {
-        font-size: 2.5vw;                /* 较大的运算符字体 */
-        color: #6b7280;                  /* 灰色运算符 */
-        font-weight: 300;                /* 细体字重 */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;                    /* 占据容器全高 */
+        font-size: 2vw;
+        color: #6b7280;
+        font-weight: 300;
     }
     
-    /* 按钮容器 - 位于第三个框下方 */
+    /* 按钮容器 - 在第3层级 */
     .button-container {
         display: flex;
-        justify-content: center;          /* 按钮水平居中 */
-        margin-top: 2%;                  /* 与上方内容的间距 */
-        padding-top: 2%;                 /* 顶部内边距 */
-        width: 100%;                     /* 占据容器全宽 */
-        box-sizing: border-box;
-        height: 15%;                     /* 固定高度，占容器高度的15% */
-        border-top: none;                /* 移除顶部边框线 */
+        justify-content: center;
+        margin-top: 1%;
+        padding-top: 1%;
+        border-top: 1px solid #f0f0f0;
     }
     
     .generate-button {
-        background-color: #3b82f6;       /* 蓝色按钮 */
+        background-color: #3b82f6;
         color: white;
         border: none;
-        border-radius: 10px;             /* 圆角按钮 */
-        padding: 12px 30px;
-        font-size: 1.3vw;                /* 响应式字体大小 */
+        border-radius: 8px;
+        padding: 0.8% 2%;
+        font-size: 1.1vw;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;       /* 悬停动画 */
-        width: 35%;                      /* 按钮宽度占容器的35% */
-        max-width: 220px;                /* 最大宽度限制 */
-        height: 60%;                     /* 高度占按钮容器的60% */
-        box-sizing: border-box;
+        transition: all 0.3s ease;
+        width: 25%;
+        max-width: 180px;
     }
     
     .generate-button:hover {
-        background-color: #2563eb;       /* 悬停时蓝色加深 */
-        transform: translateY(-3px);     /* 悬停时上浮效果 */
-        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);  /* 悬停阴影 */
+        background-color: #2563eb;
+        transform: translateY(-2px);
     }
     
-    /* 底部信息区域 */
+    /* 底部信息 - 在第3层级 */
     .footer {
         text-align: center;
-        color: #6b7280;                  /* 灰色文字 */
-        font-size: 0.9vw;                /* 较小的响应式字体 */
-        margin-top: 1%;                  /* 与上方内容的间距 */
-        width: 100%;                     /* 占据容器全宽 */
-        box-sizing: border-box;
-        height: 5%;                      /* 固定高度，占容器高度的5% */
+        color: #6b7280;
+        font-size: 0.8vw;
+        margin-top: 1%;
     }
-    
-    /* ==================== Streamlit组件样式覆盖 ==================== */
     
     /* 强制所有Streamlit组件在第3层级显示 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
-        z-index: 3 !important;           /* 确保在第3层级内 */
-        box-sizing: border-box !important;
+        z-index: 3 !important;
     }
     
-    /* 文件上传器样式定制 */
     .stFileUploader label {
-        display: none !important;         /* 隐藏默认标签 */
+        display: none !important;
     }
     
     .stFileUploader div {
-        border: none !important;          /* 移除默认边框 */
-        background-color: transparent !important;  /* 透明背景 */
+        border: none !important;
+        background-color: transparent !important;
         padding: 0 !important;
         width: 100%;
         height: 100%;
-        box-sizing: border-box !important;
     }
     
-    /* 确保所有Streamlit布局组件在第3层级 */
+    /* 确保所有列和块都在第3层级 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
         position: relative !important;
         z-index: 3 !important;
-        box-sizing: border-box !important;
     }
     
-    /* 图片显示样式 */
+    /* 图片样式 */
     img {
-        max-width: 90%;                  /* 最大宽度限制 */
-        max-height: 90%;                 /* 最大高度限制 */
-        object-fit: contain;             /* 保持图片比例 */
-        border-radius: 8px;              /* 图片圆角 */
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# ==================== HTML结构 - 三层级实现 ====================
-
-# 第1层级：灰色背景 - 最底层
-# 作用：提供整个应用的背景色，不包含任何交互元素
+# 第1层级：灰色背景
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 
-# 第2层级：白色工作区 - 中间层  
-# 作用：提供视觉容器，有背景色和阴影，但不包含具体内容
+# 第2层级：白色工作区
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 
-# 第3层级：透明组件容器 - 最上层
-# 作用：承载所有交互组件，透明背景，与第2层级完全重合
+# 第3层级：透明组件容器 - 所有交互组件放在这里
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
-# 标题区域 - 在第3层级内
+# 标题区域
 st.markdown('''
 <div class="title-section">
-    <div class="main-title">AI图片风格融合工具</div>
+    <div class="main-title">🎨 AI图片风格融合工具</div>
 </div>
 ''', unsafe_allow_html=True)
 
-# 图片框容器 - 在第3层级内，包含三个横向排列的图片框
+# 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 使用Streamlit的columns创建精确的横向布局
-# 比例说明：[26, 3, 26, 3, 26] 表示：
-# - 26%：内容图片框宽度
-# - 3%：运算符间距
-# - 26%：风格图片框宽度  
-# - 3%：运算符间距
-# - 26%：结果图片框宽度
-col1, col2, col3, col4, col5 = st.columns([26, 3, 26, 3, 26])
+# 使用Streamlit的columns创建横向布局
+col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
-# 内容图片框 - 第一个框
+# 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
         "内容图片",
         type=['png', 'jpg', 'jpeg'],
         key="content",
-        label_visibility="collapsed"  # 隐藏默认标签
+        label_visibility="collapsed"
     )
     if content_image:
         image = Image.open(content_image)
@@ -307,23 +254,24 @@ with col1:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">📷</div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号运算符 - 第一个和第二个框之间
+# 加号1
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-# 风格图片框 - 第二个框
+# 风格图片框
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
         "风格图片", 
         type=['png', 'jpg', 'jpeg'],
         key="style",
-        label_visibility="collapsed"  # 隐藏默认标签
+        label_visibility="collapsed"
     )
     if style_image:
         image = Image.open(style_image)
@@ -331,16 +279,17 @@ with col3:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">🎨</div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 等号运算符 - 第二个和第三个框之间
+# 加号2
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框 - 第三个框
+# 结果图片框
 with col5:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     if 'result_image' in st.session_state and st.session_state.result_image:
@@ -348,17 +297,17 @@ with col5:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">✨</div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 关闭图片框容器
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片框容器
 
-# 生成按钮容器 - 在第3层级内，位于三个图片框下方
+# 生成按钮
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
-if st.button("一键生成风格融合", key="generate_btn", use_container_width=False):
+if st.button("一键生成", key="generate_btn", use_container_width=False):
     if content_image and style_image:
         # 模拟生成过程
         with st.spinner("正在生成融合图片..."):
@@ -371,17 +320,17 @@ if st.button("一键生成风格融合", key="generate_btn", use_container_width
         st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 底部信息 - 在第3层级内，最底部
+# 底部信息
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭第3层级容器
-st.markdown('</div>', unsafe_allow_html=True)
+# 关闭第3层级
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
 
-# 初始化session state - 用于存储生成结果
+# 初始化session state
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
 
