@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import io
 
-# 页面配置 - 使用宽屏布局
+# 页面配置 - 使用居中布局
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复全屏显示和白色框异常问题
+# 自定义CSS - 实现层面覆盖效果
 st.markdown(
     """
     <style>
@@ -23,8 +23,8 @@ st.markdown(
     
     /* 确保页面占满整个屏幕 */
     html, body {
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         overflow: hidden;
     }
     
@@ -33,7 +33,7 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 主容器样式 - 关键修复 */
+    /* 主容器样式 */
     .stApp {
         height: 100vh;
         width: 100vw;
@@ -42,18 +42,18 @@ st.markdown(
         background-color: transparent;  /* 确保背景透明 */
     }
     
-    /* 层面0：灰色背景层 - 完全覆盖屏幕 */
+    /* 层面0：灰色背景层，完全覆盖屏幕 */
     .layer-0 {
         background-color: #808080;
         position: fixed;  /* 使用fixed定位 */
         top: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         z-index: 1;
     }
     
-    /* 层面1：白色工作区 - 居中放置，大小为层面0的2/3 */
+    /* 层面1：白色工作区，居中放置，大小为层面0的2/3 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
@@ -65,7 +65,7 @@ st.markdown(
         width: 66.666vw; /* 使用vw单位确保相对宽度 */
         height: 66.666vh; /* 使用vh单位确保相对高度 */
         z-index: 2;
-        padding: 1% 2%;  /* 减少内边距 */
+        padding: 1% 2%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -75,7 +75,7 @@ st.markdown(
     /* 标题区域 */
     .title-section {
         text-align: center;
-        margin: 0 0 2% 0;  /* 只保留底部边距 */
+        margin-bottom: 0 0 2% 0;
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
     }
@@ -192,19 +192,6 @@ st.markdown(
         max-height: 100%;
         object-fit: contain;
     }
-    
-    /* 修复Streamlit默认容器样式 */
-    .main .block-container {
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: 100% !important;
-    }
-    
-    /* 修复Streamlit主容器样式 */
-    .main {
-        padding: 0 !important;
-        background-color: transparent !important;
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -229,13 +216,13 @@ st.markdown('''
 # 三个图片框的主容器
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
-# 内容图片框
+# 内容图框
 col1, plus1, col2, plus2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
 
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "内容图片",
+        "内容图",
         type=['png', 'jpg', 'jpeg'],
         key="content",
         label_visibility="collapsed"
@@ -305,13 +292,13 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
             st.success("风格融合完成！")
             st.rerun()
     else:
-        st.warning("请先上传内容图片和风格图片")
+        st.warning("请先上传内容图和风格图")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 底部信息
 st.markdown('''
 <div class="footer">
-    使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
+    使用说明：上传内容图和风格图，点击一键生成按钮即可获得融合风格图
 </div>
 ''', unsafe_allow_html=True)
 
