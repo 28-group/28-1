@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import io
 
-# 页面配置 - 使用居中布局并隐藏滚动
+# 页面配置 - 使用居中布局
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
@@ -10,53 +10,76 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 完全重新设计
+# 自定义CSS - 实现层面覆盖效果
 st.markdown(
     """
     <style>
-    /* 隐藏所有滚动条和边距 */
-    .main .block-container {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-    
-    .main {
+    /* 全局样式重置 */
+    * {
+        margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
     
-    /* 层面0：全屏灰色背景 */
+    /* 确保页面占满整个屏幕 */
+    html, body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+    }
+    
+    /* 隐藏Streamlit默认元素 */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* 主容器样式 */
+    .stApp {
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    /* 层面0：灰色背景层 - 完全覆盖屏幕 */
     .layer-0 {
         background-color: #808080;
-        min-height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 100%;
+        z-index: 1;
     }
     
-    /* 层面1：白色工作区 - 适当缩小 */
+    /* 层面1：白色工作区 - 居中放置，大小为层面0的2/3 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        width: 80%;
-        height: 80vh;
-        padding: 30px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 66.666%; /* 2/3 宽度 */
+        height: 66.666%; /* 2/3 高度 */
+        z-index: 2;
+        padding: 2%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
     }
     
     /* 标题区域 */
     .title-section {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 2%;
+        padding-bottom: 1%;
+        border-bottom: 1px solid #f0f0f0;
     }
     
     .main-title {
-        font-size: 24px;
+        font-size: 1.8vw;
         font-weight: bold;
         color: #1f2937;
         margin: 0;
@@ -65,17 +88,17 @@ st.markdown(
     /* 三个图片框的主容器 */
     .boxes-main-container {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
-        gap: 15px;
         flex: 1;
-        margin: 10px 0;
+        padding: 0 5%;
+        margin: 2% 0;
     }
     
     /* 单个图片框样式 */
     .image-box {
-        width: 200px;
-        height: 150px;
+        width: 28%;
+        aspect-ratio: 3/2;
         border: 2px dashed #d1d5db;
         border-radius: 10px;
         display: flex;
@@ -84,6 +107,8 @@ st.markdown(
         justify-content: center;
         background-color: #f8f9fa;
         transition: all 0.3s ease;
+        position: relative;
+        z-index: 3;
     }
     
     .image-box:hover {
@@ -93,24 +118,26 @@ st.markdown(
     
     .box-text {
         color: #6b7280;
-        font-size: 14px;
+        font-size: 1vw;
         text-align: center;
         margin-top: 8px;
     }
     
     /* 加号样式 */
     .operator {
-        font-size: 24px;
+        font-size: 2vw;
         color: #6b7280;
         font-weight: 300;
-        margin: 0 5px;
     }
     
     /* 按钮容器 */
     .button-container {
         display: flex;
         justify-content: center;
-        margin-top: 20px;
+        margin-top: 2%;
+        padding-bottom: 2%;
+        position: relative;
+        z-index: 3;
     }
     
     .generate-button {
@@ -118,12 +145,17 @@ st.markdown(
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 12px 40px;
-        font-size: 16px;
+        padding: 1% 3%;
+        font-size: 1.2vw;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 200px;
+        width: 30%;
+        max-width: 200px;
+        height: 5vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .generate-button:hover {
@@ -135,32 +167,39 @@ st.markdown(
     .footer {
         text-align: center;
         color: #6b7280;
-        font-size: 12px;
-        margin-top: 15px;
+        font-size: 0.8vw;
+        margin-top: 1%;
+        padding-top: 1%;
+        border-top: 1px solid #f0f0f0;
     }
     
-    /* 隐藏Streamlit默认元素 */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    /* 确保没有滚动条 */
-    html, body, [data-testid="stAppViewContainer"] {
-        height: 100%;
-        overflow: hidden;
+    /* 文件上传按钮样式 */
+    .stFileUploader label {
+        display: none !important;
     }
     
-    .stApp {
-        height: 100vh;
-        overflow: hidden;
+    .stFileUploader div {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+    }
+    
+    /* 图片样式 */
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
+# 创建主容器
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+
 # 层面0：灰色背景
-st.markdown('<div class="layer-0">', unsafe_allow_html=True)
+st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 
 # 层面1：白色工作区
 st.markdown('<div class="layer-1">', unsafe_allow_html=True)
@@ -176,7 +215,7 @@ st.markdown('''
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
 # 内容图片框
-col1, plus1, col2, plus2, col3 = st.columns([1, 0.1, 1, 0.1, 1])
+col1, plus1, col2, plus2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
 
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
@@ -188,11 +227,11 @@ with col1:
     )
     if content_image:
         image = Image.open(content_image)
-        st.image(image, width=120)
+        st.image(image)
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 24px; color: #6b7280;">📷</div>
+            <div style="font-size: 3vw; color: #6b7280;">📷</div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -211,11 +250,11 @@ with col2:
     )
     if style_image:
         image = Image.open(style_image)
-        st.image(image, width=120)
+        st.image(image)
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 24px; color: #6b7280;">🎨</div>
+            <div style="font-size: 3vw; color: #6b7280;">🎨</div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -227,11 +266,11 @@ with plus2:
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     if 'result_image' in st.session_state and st.session_state.result_image:
-        st.image(st.session_state.result_image, width=120, caption="融合结果")
+        st.image(st.session_state.result_image, caption="融合结果")
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 24px; color: #6b7280;">✨</div>
+            <div style="font-size: 3vw; color: #6b7280;">✨</div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -241,13 +280,13 @@ st.markdown('</div>', unsafe_allow_html=True)  # 关闭boxes-main-container
 
 # 生成按钮
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
-if st.button("🚀 一键生成风格融合图片", key="generate_btn", use_container_width=False):
+if st.button("一键生成", key="generate_btn", use_container_width=False):
     if content_image and style_image:
         # 模拟生成过程
         with st.spinner("正在生成融合图片..."):
             # 这里添加实际的风格融合代码
             # 暂时使用占位图
-            st.session_state.result_image = "https://via.placeholder.com/200x150/4CAF50/FFFFFF?text=融合结果"
+            st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
             st.success("风格融合完成！")
             st.rerun()
     else:
@@ -261,9 +300,11 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭层面1和层面0
+# 关闭层面1
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-1
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-0
+
+# 关闭主容器
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭main-container
 
 # 初始化session state
 if 'result_image' not in st.session_state:
