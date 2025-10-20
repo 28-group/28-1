@@ -2,15 +2,15 @@ import streamlit as st
 from PIL import Image
 import io
 
-# 页面配置 - 使用居中布局
+# 页面配置 - 使用宽屏布局
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
-    layout="centered",
+    layout="wide",  # 使用宽屏布局
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 实现层面覆盖效果
+# 自定义CSS - 修复全屏显示和白色框异常问题
 st.markdown(
     """
     <style>
@@ -23,8 +23,8 @@ st.markdown(
     
     /* 确保页面占满整个屏幕 */
     html, body {
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
         overflow: hidden;
     }
     
@@ -33,47 +33,49 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 主容器样式 */
+    /* 主容器样式 - 关键修复 */
     .stApp {
         height: 100vh;
         width: 100vw;
         overflow: hidden;
         position: relative;
+        background-color: transparent;  /* 确保背景透明 */
     }
     
-    /* 层面0：灰色背景层，完全覆盖屏幕 */
+    /* 层面0：灰色背景层 - 完全覆盖屏幕 */
     .layer-0 {
         background-color: #808080;
-        position: absolute;
+        position: fixed;  /* 使用fixed定位 */
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         z-index: 1;
     }
     
-    /* 层面1：白色工作区，居中放置，大小为层面0的2/3 */
+    /* 层面1：白色工作区 - 居中放置，大小为层面0的2/3 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        position: absolute;
-        top: 60%;
+        position: fixed;  /* 使用fixed定位 */
+        top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 66.666%; /* 2/3 宽度 */
-        height: 66.666%; /* 2/3 高度 */
+        width: 66.666vw; /* 使用vw单位确保相对宽度 */
+        height: 66.666vh; /* 使用vh单位确保相对高度 */
         z-index: 2;
-        padding: 2%;
+        padding: 1% 2%;  /* 减少内边距 */
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        overflow: hidden; /* 防止内容溢出 */
     }
     
     /* 标题区域 */
     .title-section {
         text-align: center;
-        margin-bottom: 0 0 2% 0;
+        margin: 0 0 2% 0;  /* 只保留底部边距 */
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
     }
@@ -190,6 +192,19 @@ st.markdown(
         max-height: 100%;
         object-fit: contain;
     }
+    
+    /* 修复Streamlit默认容器样式 */
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    /* 修复Streamlit主容器样式 */
+    .main {
+        padding: 0 !important;
+        background-color: transparent !important;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -214,13 +229,13 @@ st.markdown('''
 # 三个图片框的主容器
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
-# 内容图框
+# 内容图片框
 col1, plus1, col2, plus2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
 
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "内容图",
+        "内容图片",
         type=['png', 'jpg', 'jpeg'],
         key="content",
         label_visibility="collapsed"
@@ -290,13 +305,13 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
             st.success("风格融合完成！")
             st.rerun()
     else:
-        st.warning("请先上传内容图和风格图")
+        st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 底部信息
 st.markdown('''
 <div class="footer">
-    使用说明：上传内容图和风格图，点击一键生成按钮即可获得融合风格图
+    使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
 </div>
 ''', unsafe_allow_html=True)
 
