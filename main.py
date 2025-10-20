@@ -10,22 +10,31 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 只修复组件显示，保持原有布局
+# 自定义CSS - 先彻底解决滑动问题
 st.markdown(
     """
     <style>
-    /* 全局样式重置 */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+    /* 彻底禁止页面滑动 */
+    html, body, #root, [data-testid="stAppViewContainer"] {
+        height: 100vh !important;
+        width: 100vw !important;
+        overflow: hidden !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
-    /* 确保页面占满整个屏幕且不可滚动 */
-    html, body {
-        height: 100vh;
-        width: 100vw;
+    .stApp {
+        height: 100vh !important;
+        width: 100vw !important;
         overflow: hidden !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     /* 隐藏Streamlit默认元素 */
@@ -33,33 +42,10 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 主容器样式 */
-    .stApp {
-        height: 100vh;
-        width: 100vw;
-        overflow: hidden !important;
-        position: relative;
-    }
-    
-    /* 修复Streamlit默认容器样式 */
-    .main .block-container {
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
-        height: 100vh;
-    }
-    
-    .main {
-        padding: 0 !important;
-        height: 100vh;
-        overflow: hidden !important;
-    }
-    
     /* 层面0：灰色背景层 */
     .layer-0 {
         background-color: #808080;
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
@@ -72,7 +58,7 @@ st.markdown(
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        position: absolute;
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -180,12 +166,10 @@ st.markdown(
         margin-top: 1%;
     }
     
-    /* 关键修复：确保Streamlit组件在正确层级显示 */
+    /* 确保图片上传组件正确显示 */
     .stFileUploader {
-        width: 100% !important;
-        height: 100% !important;
-        position: relative !important;
-        z-index: 3 !important;
+        width: 100%;
+        height: 100%;
     }
     
     .stFileUploader label {
@@ -196,21 +180,8 @@ st.markdown(
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        position: relative !important;
-        z-index: 3 !important;
-    }
-    
-    /* 修复按钮显示 */
-    .stButton {
-        position: relative !important;
-        z-index: 3 !important;
-    }
-    
-    .stButton button {
-        position: relative !important;
-        z-index: 3 !important;
+        width: 100%;
+        height: 100%;
     }
     
     /* 图片样式 */
@@ -218,19 +189,6 @@ st.markdown(
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
-        position: relative;
-        z-index: 3;
-    }
-    
-    /* 确保所有内容在正确层级 */
-    [data-testid="stVerticalBlock"] {
-        position: relative !important;
-        z-index: 3 !important;
-    }
-    
-    .stColumn {
-        position: relative !important;
-        z-index: 3 !important;
     }
     </style>
     """,
