@@ -240,23 +240,25 @@ st.markdown(
         box-sizing: border-box !important;
     }
     
-    /* 【修改】自定义文件上传按钮文字为中文 */
+    /* 文件上传按钮文字修改为中文 */
     .stFileUploader button {
-        font-family: inherit !important;
+        position: relative !important;
     }
     
     .stFileUploader button span {
-    visibility: hidden !important;
-}
-
-.stFileUploader button span::after {
-    content: "上传图片" !important;    /* 替换为中文 */
-    visibility: visible !important;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
+        visibility: hidden !important;
+    }
+    
+    .stFileUploader button::after {
+        content: "上传图片" !important;
+        visibility: visible !important;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: inherit;
+        font-size: inherit;
+    }
     
     /* 确保所有Streamlit布局组件在第3层级 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -314,7 +316,7 @@ col1, col2, col3, col4, col5 = st.columns([26, 3, 26, 3, 26])
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "上传内容图片",  # 【修改】改为中文提示
+        "内容图片",
         type=['png', 'jpg', 'jpeg'],
         key="content",
         label_visibility="collapsed"  # 隐藏默认标签
@@ -338,7 +340,7 @@ with col2:
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
-        "上传风格图片",  # 【修改】改为中文提示
+        "风格图片", 
         type=['png', 'jpg', 'jpeg'],
         key="style",
         label_visibility="collapsed"  # 隐藏默认标签
@@ -402,7 +404,6 @@ st.markdown('</div>', unsafe_allow_html=True)
 # 初始化session state - 用于存储生成结果
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
-
 
 
 
