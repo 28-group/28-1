@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 先彻底解决滑动问题
+# 自定义CSS - 明确三个层级
 st.markdown(
     """
     <style>
@@ -42,7 +42,7 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 层面0：灰色背景层 */
+    /* 第1层级：灰色背景层 */
     .layer-0 {
         background-color: #808080;
         position: fixed;
@@ -53,7 +53,7 @@ st.markdown(
         z-index: 1;
     }
     
-    /* 层面1：白色工作区 */
+    /* 第2层级：白色工作区 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
@@ -70,7 +70,23 @@ st.markdown(
         flex-direction: column;
     }
     
-    /* 标题区域 */
+    /* 第3层级：透明组件容器 - 大小位置与第2层级完全一致 */
+    .layer-2 {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 70%;
+        height: 70%;
+        z-index: 3;
+        padding: 2%;
+        display: flex;
+        flex-direction: column;
+        background-color: transparent; /* 完全透明 */
+        pointer-events: auto; /* 确保可以交互 */
+    }
+    
+    /* 标题区域 - 在第3层级 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -85,7 +101,7 @@ st.markdown(
         margin: 0;
     }
     
-    /* 图片框容器 */
+    /* 图片框容器 - 在第3层级 */
     .image-container {
         flex: 1;
         display: flex;
@@ -95,7 +111,7 @@ st.markdown(
         padding: 2%;
     }
     
-    /* 单个图片框样式 */
+    /* 单个图片框样式 - 在第3层级 */
     .image-box {
         width: 28%;
         aspect-ratio: 3/2;
@@ -123,14 +139,14 @@ st.markdown(
         margin-top: 8px;
     }
     
-    /* 加号样式 */
+    /* 加号样式 - 在第3层级 */
     .operator {
         font-size: 2vw;
         color: #6b7280;
         font-weight: 300;
     }
     
-    /* 按钮容器 */
+    /* 按钮容器 - 在第3层级 */
     .button-container {
         display: flex;
         justify-content: center;
@@ -158,7 +174,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部信息 */
+    /* 底部信息 - 在第3层级 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -166,10 +182,10 @@ st.markdown(
         margin-top: 1%;
     }
     
-    /* 确保图片上传组件正确显示 */
-    .stFileUploader {
-        width: 100%;
-        height: 100%;
+    /* 强制所有Streamlit组件在第3层级显示 */
+    .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
+        position: relative !important;
+        z-index: 3 !important;
     }
     
     .stFileUploader label {
@@ -184,6 +200,12 @@ st.markdown(
         height: 100%;
     }
     
+    /* 确保所有列和块都在第3层级 */
+    .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+    
     /* 图片样式 */
     img {
         max-width: 100%;
@@ -195,11 +217,14 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 创建层面0：灰色背景
+# 第1层级：灰色背景
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 
-# 创建层面1：白色工作区
-st.markdown('<div class="layer-1">', unsafe_allow_html=True)
+# 第2层级：白色工作区
+st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
+
+# 第3层级：透明组件容器 - 所有交互组件放在这里
+st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
 # 标题区域
 st.markdown('''
@@ -302,8 +327,8 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭层面1
-st.markdown('</div>', unsafe_allow_html=True)
+# 关闭第3层级
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
 
 # 初始化session state
 if 'result_image' not in st.session_state:
