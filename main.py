@@ -58,7 +58,7 @@ st.markdown(
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         position: absolute;
-        top: 50%;
+        top: 60%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 66.666%; /* 2/3 宽度 */
