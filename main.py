@@ -141,7 +141,7 @@ st.markdown(
     }
     
     .generate-button {
-        background-color: #3b82f6;
+        background-color: #3b82f6; /* 蓝色，按钮颜色 */
         color: white;
         border: none;
         border-radius: 8px;
@@ -159,7 +159,7 @@ st.markdown(
     }
     
     .generate-button:hover {
-        background-color: #2563eb;
+        background-color: #2563eb; /* 深蓝色，鼠标悬停时的按钮颜色 */
         transform: translateY(-2px);
     }
     
