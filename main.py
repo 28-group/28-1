@@ -2,15 +2,15 @@ import streamlit as st
 from PIL import Image
 import io
 
-# 页面配置 - 使用居中布局
+# 页面配置 - 使用宽屏布局
 st.set_page_config(
-    page_title="AI画家 - 图片风格融合",
+    page_title="AI画家 - 图片片风格融合",
     page_icon="🎨",
-    layout="wide",  # 使用宽屏布局
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 实现层面覆盖效果
+# 自定义CSS - 修复层级和定位问题
 st.markdown(
     """
     <style>
@@ -23,8 +23,8 @@ st.markdown(
     
     /* 确保页面占满整个屏幕 */
     html, body {
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
         overflow: hidden;
     }
     
@@ -39,17 +39,29 @@ st.markdown(
         width: 100vw;
         overflow: hidden;
         position: relative;
-        background-color: transparent;  /* 确保背景透明 */
+        background-color: transparent;
+    }
+    
+    /* 修复Streamlit默认容器样式 */
+    .main .block-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    .main {
+        padding: 0 !important;
+        background-color: transparent !important;
     }
     
     /* 层面0：灰色背景层，完全覆盖屏幕 */
     .layer-0 {
         background-color: #808080;
-        position: fixed;  /* 使用fixed定位 */
+        position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         z-index: 1;
     }
     
@@ -58,18 +70,17 @@ st.markdown(
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        position: fixed;  /* 使用fixed定位 */
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 66.666vw; /* 使用vw单位确保相对宽度 */
-        height: 66.666vh; /* 使用vh单位确保相对高度 */
+        width: 66.666vw;
+        height: 66.666vh;
         z-index: 2;
         padding: 2%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        overflow: hidden; /* 防止内容溢出 */
     }
     
     /* 标题区域 */
@@ -87,19 +98,21 @@ st.markdown(
         margin: 0;
     }
     
-    /* 三个图片框的主容器 */
+    /* 三个图片框的主容器 - 使用CSS Grid布局 */
     .boxes-main-container {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 0.05fr 1fr 0.05fr 1fr;
         align-items: center;
         flex: 1;
         padding: 0 5%;
         margin: 2% 0;
+        position: relative;
+        z-index: 3;
     }
     
     /* 单个图片框样式 */
     .image-box {
-        width: 28%;
+        width: 100%;
         aspect-ratio: 3/2;
         border: 2px dashed #d1d5db;
         border-radius: 10px;
@@ -110,7 +123,7 @@ st.markdown(
         background-color: #f8f9fa;
         transition: all 0.3s ease;
         position: relative;
-        z-index: 3;
+        z-index: 4;
     }
     
     .image-box:hover {
@@ -130,6 +143,9 @@ st.markdown(
         font-size: 2vw;
         color: #6b7280;
         font-weight: 300;
+        text-align: center;
+        position: relative;
+        z-index: 3;
     }
     
     /* 按钮容器 */
@@ -192,6 +208,12 @@ st.markdown(
         max-height: 100%;
         object-fit: contain;
     }
+    
+    /* 确保Streamlit组件在正确的层级 */
+    .stText, .stMarkdown, .stImage, .stButton {
+        position: relative;
+        z-index: 4;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -213,70 +235,67 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 三个图片框的主容器
+# 三个图片框的主容器 - 使用HTML Grid布局替代Streamlit columns
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
-# 内容图框
-col1, plus1, col2, plus2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
+# 内容图片框
+st.markdown('<div class="image-box">', unsafe_allow_html=True)
+content_image = st.file_uploader(
+    "内容图片",
+    type=['png', 'jpg', 'jpeg'],
+    key="content",
+    label_visibility="collapsed"
+)
+if content_image:
+    image = Image.open(content_image)
+    st.image(image)
+else:
+    st.markdown('''
+    <div style="text-align: center;">
+        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div class="box-text">内容图片</div>
+    </div>
+    ''', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-with col1:
-    st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    content_image = st.file_uploader(
-        "内容图",
-        type=['png', 'jpg', 'jpeg'],
-        key="content",
-        label_visibility="collapsed"
-    )
-    if content_image:
-        image = Image.open(content_image)
-        st.image(image)
-    else:
-        st.markdown('''
-        <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;"></div>
-            <div class="box-text">内容图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+# 加号1
+st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-with plus1:
-    st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
+# 风格图片框
+st.markdown('<div class="image-box">', unsafe_allow_html=True)
+style_image = st.file_uploader(
+    "风格图片", 
+    type=['png', 'jpg', 'jpeg'],
+    key="style",
+    label_visibility="collapsed"
+)
+if style_image:
+    image = Image.open(style_image)
+    st.image(image)
+else:
+    st.markdown('''
+    <div style="text-align: center;">
+        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div class="box-text">风格图片</div>
+    </div>
+    ''', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-with col2:
-    st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    style_image = st.file_uploader(
-        "风格图片", 
-        type=['png', 'jpg', 'jpeg'],
-        key="style",
-        label_visibility="collapsed"
-    )
-    if style_image:
-        image = Image.open(style_image)
-        st.image(image)
-    else:
-        st.markdown('''
-        <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;"></div>
-            <div class="box-text">风格图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+# 加号2
+st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-with plus2:
-    st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
-
-with col3:
-    st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    if 'result_image' in st.session_state and st.session_state.result_image:
-        st.image(st.session_state.result_image, caption="融合结果")
-    else:
-        st.markdown('''
-        <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;"></div>
-            <div class="box-text">融合结果</div>
-        </div>
-        ''', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+# 结果图片框
+st.markdown('<div class="image-box">', unsafe_allow_html=True)
+if 'result_image' in st.session_state and st.session_state.result_image:
+    st.image(st.session_state.result_image, caption="融合结果")
+else:
+    st.markdown('''
+    <div style="text-align: center;">
+        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div class="box-text">融合结果</div>
+    </div>
+    ''', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭boxes-main-container
 
