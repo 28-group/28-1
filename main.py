@@ -240,24 +240,22 @@ st.markdown(
         box-sizing: border-box !important;
     }
     
-    /* 文件上传按钮文字修改为中文 */
-    .stFileUploader button {
+    /* 正确的方法：彻底替换文件上传按钮文字 */
+    .stFileUploader button p {
+        visibility: hidden !important;
         position: relative !important;
     }
     
-    .stFileUploader button span {
-        visibility: hidden !important;
-    }
-    
-    .stFileUploader button::after {
+    .stFileUploader button p::before {
         content: "上传图片" !important;
         visibility: visible !important;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        color: inherit;
-        font-size: inherit;
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        color: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
     }
     
     /* 确保所有Streamlit布局组件在第3层级 */
