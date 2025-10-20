@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复三个框的显示问题
+# 自定义CSS - 彻底解决横向布局和滑动问题
 st.markdown(
     """
     <style>
@@ -25,7 +25,7 @@ st.markdown(
     html, body {
         height: 100vh;
         width: 100vw;
-        overflow: hidden;
+        overflow: hidden !important;
     }
     
     /* 隐藏Streamlit默认元素 */
@@ -37,7 +37,7 @@ st.markdown(
     .stApp {
         height: 100vh;
         width: 100vw;
-        overflow: hidden;
+        overflow: hidden !important;
         position: relative;
         background-color: transparent;
     }
@@ -47,11 +47,13 @@ st.markdown(
         padding: 0 !important;
         margin: 0 !important;
         max-width: 100% !important;
+        overflow: hidden !important;
     }
     
     .main {
         padding: 0 !important;
         background-color: transparent !important;
+        overflow: hidden !important;
     }
     
     /* 层面0：灰色背景层，完全覆盖屏幕 */
@@ -81,7 +83,7 @@ st.markdown(
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        overflow: hidden;
+        overflow: hidden !important;
     }
     
     /* 标题区域 */
@@ -110,14 +112,16 @@ st.markdown(
         position: relative;
         z-index: 3;
         width: 100%;
+        height: auto;
+        overflow: hidden !important;
     }
     
-    /* 单个图片框框样式 - 大幅缩小尺寸框大小 */
+    /* 单个图片框样式 - 绿色主题 */
     .image-box {
         width: 28%; /* 每个框占容器宽度的28% */
-        max-width: 200px; /* 最大框最大宽度限制 */
+        max-width: 180px; /* 最大宽度限制 */
         aspect-ratio: 3/2; /* 保持3:2的长宽比 */
-        border: 2px dashed #4CAF50; /* 绿色色边框 */
+        border: 2px dashed #4CAF50; /* 绿色边框 */
         border-radius: 10px;
         display: flex;
         flex-direction: column;
@@ -127,7 +131,6 @@ st.markdown(
         transition: all 0.3s ease;
         position: relative;
         z-index: 4;
-        margin: 0 auto; /* 水平居中 */
     }
     
     .image-box:hover {
@@ -197,6 +200,11 @@ st.markdown(
     }
     
     /* 文件上传按钮样式 */
+    .stFileUploader {
+        width: 100%;
+        height: 100%;
+    }
+    
     .stFileUploader label {
         display: none !important;
     }
@@ -205,6 +213,8 @@ st.markdown(
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
+        width: 100%;
+        height: 100%;
     }
     
     /* 图片样式 */
@@ -214,16 +224,10 @@ st.markdown(
         object-fit: contain;
     }
     
-    /* 确保Streamlit组件在正确的层级 */
-    .stText, .stMarkdown, .stImage, .stButton {
-        position: relative;
-        z-index: 4;
-    }
-    
     /* 确保所有元素都在可视区域内 */
-    .layer-1 > * {
-        max-width: 100%;
-        max-height: 100%;
+    * {
+        max-height: 100vh !important;
+        max-width: 100vw !important;
     }
     </style>
     """,
@@ -246,69 +250,59 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 三个图片框的主容器 - 使用Flexbox布局
-st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
-
-# 内容图片框
-st.markdown('<div class="image-box">', unsafe_allow_html=True)
-content_image = st.file_uploader(
-    "内容图片",
-    type=['png', 'jpg', 'jpeg'],
-    key="content",
-    label_visibility="collapsed"
-)
-if content_image:
-    image = Image.open(content_image)
-    st.image(image)
-else:
-    st.markdown('''
-    <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #4CAF50;"></div>
-        <div class="box-text">内容图片</div>
+# 三个图片框的主容器 - 使用HTML和CSS创建横向布局
+st.markdown('''
+<div class="boxes-main-container">
+    <!-- 内容图片框 -->
+    <div class="image-box">
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">📷</div>
+            <div class="box-text">内容图片</div>
+        </div>
     </div>
-    ''', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# 加号1
-st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
-
-# 风格图片框
-st.markdown('<div class="image-box">', unsafe_allow_html=True)
-style_image = st.file_uploader(
-    "风格图片", 
-    type=['png', 'jpg', 'jpeg'],
-    key="style",
-    label_visibility="collapsed"
-)
-if style_image:
-    image = Image.open(style_image)
-    st.image(image)
-else:
-    st.markdown('''
-    <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #4CAF50;"></div>
-        <div class="box-text">风格图片</div>
+    
+    <!-- 加号1 -->
+    <div class="operator">+</div>
+    
+    <!-- 风格图片框 -->
+    <div class="image-box">
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">🎨</div>
+            <div class="box-text">风格图片</div>
+        </div>
     </div>
-    ''', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# 加号2
-st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
-
-# 结果图片框
-st.markdown('<div class="image-box">', unsafe_allow_html=True)
-if 'result_image' in st.session_state and st.session_state.result_image:
-    st.image(st.session_state.result_image, caption="融合结果")
-else:
-    st.markdown('''
-    <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #4CAF50;"></div>
-        <div class="box-text">融合结果</div>
+    
+    <!-- 加号2 -->
+    <div class="operator">=</div>
+    
+    <!-- 结果图片框 -->
+    <div class="image-box">
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;">✨</div>
+            <div class="box-text">融合结果</div>
+        </div>
     </div>
-    ''', unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
+</div>
+''', unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭boxes-main-container
+# 使用Streamlit的columns创建文件上传组件，放置在绝对位置
+col1, col2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
+
+with col1:
+    content_image = st.file_uploader(
+        "内容图片",
+        type=['png', 'jpg', 'jpeg'],
+        key="content",
+        label_visibility="collapsed"
+    )
+
+with col3:
+    style_image = st.file_uploader(
+        "风格图片", 
+        type=['png', 'jpg', 'jpeg'],
+        key="style",
+        label_visibility="collapsed"
+    )
 
 # 生成按钮
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
