@@ -73,7 +73,7 @@ st.markdown(
     /* 标题区域 */
     .title-section {
         text-align: center;
-        margin-bottom: 2%;
+        margin-bottom: 0 0 2% 0;
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
     }
