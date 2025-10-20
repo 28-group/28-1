@@ -245,9 +245,18 @@ st.markdown(
         font-family: inherit !important;
     }
     
-    .stFileUploader button::after {
-        content: "上传" !important;       /* 将按钮文字改为中文"上传" */
-    }
+    .stFileUploader button span {
+    visibility: hidden !important;
+}
+
+.stFileUploader button span::after {
+    content: "上传图片" !important;    /* 替换为中文 */
+    visibility: visible !important;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
     
     /* 确保所有Streamlit布局组件在第3层级 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
