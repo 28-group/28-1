@@ -109,15 +109,15 @@ st.markdown(
         align-items: center;
         gap: 3%; /* 增加间距 */
         padding: 0 2%;
-        width: 100%;
+        width: 60%;
         box-sizing: border-box;
-        height: 60%; /* 固定图片区域高度 */
+        height: 50%; /* 固定图片区域高度 */
     }
     
     /* 单个图片框样式 - 重新调整大小 */
     .image-box {
-        width: 26%; /* 调整宽度，保持3:2比例 */
-        height: 80%; /* 相对于容器的高度 */
+        width: 25%; /* 调整宽度，保持3:2比例 */
+        height: 60%; /* 相对于容器的高度 */
         border: 2px dashed #4CAF50;
         border-radius: 12px; /* 稍微增大圆角 */
         display: flex;
@@ -152,7 +152,7 @@ st.markdown(
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100%;
+        height: 60%;
     }
     
     /* 按钮容器 - 重新调整 */
@@ -162,9 +162,9 @@ st.markdown(
         margin-top: 2%;
         padding-top: 2%;
         border-top: 1px solid #f0f0f0;
-        width: 100%;
+        width: 60%;
         box-sizing: border-box;
-        height: 15%; /* 固定按钮区域高度 */
+        height: 10%; /* 固定按钮区域高度 */
     }
     
     .generate-button {
@@ -194,7 +194,7 @@ st.markdown(
         text-align: center;
         color: #6b7280;
         font-size: 0.9vw; /* 稍微增大底部文字 */
-        margin-top: 1%;
+        margin-top: 2%;
         width: 100%;
         box-sizing: border-box;
         height: 5%; /* 固定底部区域高度 */
