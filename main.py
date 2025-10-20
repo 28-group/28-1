@@ -240,6 +240,15 @@ st.markdown(
         box-sizing: border-box !important;
     }
     
+    /* 【修改】自定义文件上传按钮文字为中文 */
+    .stFileUploader button {
+        font-family: inherit !important;
+    }
+    
+    .stFileUploader button::after {
+        content: "上传" !important;       /* 将按钮文字改为中文"上传" */
+    }
+    
     /* 确保所有Streamlit布局组件在第3层级 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
         position: relative !important;
@@ -296,7 +305,7 @@ col1, col2, col3, col4, col5 = st.columns([26, 3, 26, 3, 26])
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "内容图片",
+        "上传内容图片",  # 【修改】改为中文提示
         type=['png', 'jpg', 'jpeg'],
         key="content",
         label_visibility="collapsed"  # 隐藏默认标签
@@ -320,7 +329,7 @@ with col2:
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
-        "风格图片", 
+        "上传风格图片",  # 【修改】改为中文提示
         type=['png', 'jpg', 'jpeg'],
         key="style",
         label_visibility="collapsed"  # 隐藏默认标签
