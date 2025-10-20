@@ -41,7 +41,7 @@ st.markdown(
         position: relative;
     }
     
-    /* 层面0：灰色背景层 - 完全覆盖屏幕 */
+    /* 层面0：灰色背景层，完全覆盖屏幕 */
     .layer-0 {
         background-color: #808080;
         position: absolute;
@@ -52,7 +52,7 @@ st.markdown(
         z-index: 1;
     }
     
-    /* 层面1：白色工作区 - 居中放置，大小为层面0的2/3 */
+    /* 层面1：白色工作区，居中放置，大小为层面0的2/3 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
@@ -214,13 +214,13 @@ st.markdown('''
 # 三个图片框的主容器
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
-# 内容图片框
+# 内容图框
 col1, plus1, col2, plus2, col3 = st.columns([1, 0.05, 1, 0.05, 1])
 
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "内容图片",
+        "内容图",
         type=['png', 'jpg', 'jpeg'],
         key="content",
         label_visibility="collapsed"
@@ -290,13 +290,13 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
             st.success("风格融合完成！")
             st.rerun()
     else:
-        st.warning("请先上传内容图片和风格图片")
+        st.warning("请先上传内容图和风格图")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 底部信息
 st.markdown('''
 <div class="footer">
-    使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
+    使用说明：上传内容图和风格图，点击一键生成按钮即可获得融合风格图
 </div>
 ''', unsafe_allow_html=True)
 
