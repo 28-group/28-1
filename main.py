@@ -4,13 +4,13 @@ import io
 
 # 页面配置 - 使用宽屏布局
 st.set_page_config(
-    page_title="AI画家 - 图片片风格融合",
+    page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复层级和定位问题
+# 自定义CSS - 修复三个框的显示问题
 st.markdown(
     """
     <style>
@@ -81,6 +81,7 @@ st.markdown(
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        overflow: hidden;
     }
     
     /* 标题区域 */
@@ -98,41 +99,44 @@ st.markdown(
         margin: 0;
     }
     
-    /* 三个图片框的主容器 - 使用CSS Grid布局 */
+    /* 三个图片框的主容器 - 使用Flexbox布局 */
     .boxes-main-container {
-        display: grid;
-        grid-template-columns: 1fr 0.05fr 1fr 0.05fr 1fr;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
         flex: 1;
         padding: 0 5%;
         margin: 2% 0;
         position: relative;
         z-index: 3;
+        width: 100%;
     }
     
-    /* 单个图片框样式 */
+    /* 单个图片框框样式 - 大幅缩小尺寸框大小 */
     .image-box {
-        width: 100%;
-        aspect-ratio: 3/2;
-        border: 2px dashed #d1d5db;
+        width: 28%; /* 每个框占容器宽度的28% */
+        max-width: 200px; /* 最大框最大宽度限制 */
+        aspect-ratio: 3/2; /* 保持3:2的长宽比 */
+        border: 2px dashed #4CAF50; /* 绿色色边框 */
         border-radius: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #f8f9fa;
+        background-color: #f1f8e9; /* 浅绿色背景 */
         transition: all 0.3s ease;
         position: relative;
         z-index: 4;
+        margin: 0 auto; /* 水平居中 */
     }
     
     .image-box:hover {
-        border-color: #3b82f6;
-        background-color: rgba(59, 130, 246, 0.05);
+        border-color: #388E3C; /* 深绿色边框（悬停时） */
+        background-color: #dcedc8; /* 深一点的绿色背景（悬停时） */
     }
     
     .box-text {
-        color: #6b7280;
+        color: #2E7D32; /* 绿色文字 */
         font-size: 1vw;
         text-align: center;
         margin-top: 8px;
@@ -146,6 +150,7 @@ st.markdown(
         text-align: center;
         position: relative;
         z-index: 3;
+        width: 5%; /* 加号区域宽度 */
     }
     
     /* 按钮容器 */
@@ -214,6 +219,12 @@ st.markdown(
         position: relative;
         z-index: 4;
     }
+    
+    /* 确保所有元素都在可视区域内 */
+    .layer-1 > * {
+        max-width: 100%;
+        max-height: 100%;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -235,7 +246,7 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 三个图片框的主容器 - 使用HTML Grid布局替代Streamlit columns
+# 三个图片框的主容器 - 使用Flexbox布局
 st.markdown('<div class="boxes-main-container">', unsafe_allow_html=True)
 
 # 内容图片框
@@ -252,7 +263,7 @@ if content_image:
 else:
     st.markdown('''
     <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div style="font-size: 3vw; color: #4CAF50;"></div>
         <div class="box-text">内容图片</div>
     </div>
     ''', unsafe_allow_html=True)
@@ -275,7 +286,7 @@ if style_image:
 else:
     st.markdown('''
     <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div style="font-size: 3vw; color: #4CAF50;"></div>
         <div class="box-text">风格图片</div>
     </div>
     ''', unsafe_allow_html=True)
@@ -291,7 +302,7 @@ if 'result_image' in st.session_state and st.session_state.result_image:
 else:
     st.markdown('''
     <div style="text-align: center;">
-        <div style="font-size: 3vw; color: #6b7280;"></div>
+        <div style="font-size: 3vw; color: #4CAF50;"></div>
         <div class="box-text">融合结果</div>
     </div>
     ''', unsafe_allow_html=True)
@@ -330,3 +341,5 @@ st.markdown('</div>', unsafe_allow_html=True)  # 关闭main-container
 # 初始化session state
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
+
+
