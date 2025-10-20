@@ -276,7 +276,7 @@ with col1:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;">📷</div>
+            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -301,7 +301,7 @@ with col3:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;">🎨</div>
+            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -319,7 +319,7 @@ with col5:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;">✨</div>
+            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
