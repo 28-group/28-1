@@ -81,7 +81,7 @@ st.markdown(
     .main-title {
         font-size: 1.8vw;
         font-weight: bold;
-        color: #1f2937;
+        color: #ff69b4; /* 粉红色 */
         margin: 0;
     }
     
