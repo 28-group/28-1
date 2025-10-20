@@ -112,7 +112,7 @@ st.markdown(
     }
     
     .main-title {
-        font-size: 2.2vw;                 /* 响应式字体大小，基于视口宽度 */
+        font-size: 20vw;                 /* 响应式字体大小，基于视口宽度 */
         font-weight: bold;
         color: #ff69b4;                   /* 粉红色标题 */
         margin: 0;
