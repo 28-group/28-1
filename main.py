@@ -231,7 +231,7 @@ with col1:
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;">📷</div>
+            <div style="font-size: 3vw; color: #6b7280;"></div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -254,7 +254,7 @@ with col2:
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;">🎨</div>
+            <div style="font-size: 3vw; color: #6b7280;"></div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
