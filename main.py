@@ -270,7 +270,7 @@ with col3:
     else:
         st.markdown('''
         <div style="text-align: center;">
-            <div style="font-size: 3vw; color: #6b7280;">✨</div>
+            <div style="font-size: 3vw; color: #6b7280;"></div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
