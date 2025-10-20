@@ -76,7 +76,7 @@ st.markdown(
         width: 70%;
         height: 70%;
         z-index: 3;
-        padding: 3%; /* 增加内边距给组件更多空间 */
+        padding: 3%;
         display: flex;
         flex-direction: column;
         background-color: transparent;
@@ -87,15 +87,15 @@ st.markdown(
     /* 标题区域 - 调整大小 */
     .title-section {
         text-align: center;
-        margin-bottom: 3%; /* 增加间距 */
+        margin-bottom: 3%;
         padding-bottom: 2%;
         border-bottom: 1px solid #f0f0f0;
         width: 100%;
-        height: 8%; /* 固定标题区域高度 */
+        height: 8%;
     }
     
     .main-title {
-        font-size: 2.2vw; /* 增大标题字体 */
+        font-size: 2.2vw;
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
@@ -105,28 +105,28 @@ st.markdown(
     .image-container {
         flex: 1;
         display: flex;
-        justify-content: space-between; /* 均匀分布三个框 */
+        justify-content: space-between;
         align-items: center;
-        gap: 3%; /* 增加间距 */
+        gap: 3%;
         padding: 0 2%;
-        width: 60%;
+        width: 100%;
         box-sizing: border-box;
-        height: 50%; /* 固定图片区域高度 */
+        height: 60%;
     }
     
     /* 单个图片框样式 - 重新调整大小 */
     .image-box {
-        width: 25%; /* 调整宽度，保持3:2比例 */
-        height: 60%; /* 相对于容器的高度 */
+        width: 26%;
+        height: 80%;
         border: 2px dashed #4CAF50;
-        border-radius: 12px; /* 稍微增大圆角 */
+        border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         background-color: #f1f8e9;
         transition: all 0.3s ease;
-        padding: 3%; /* 增加内边距 */
+        padding: 3%;
         position: relative;
         box-sizing: border-box;
     }
@@ -134,52 +134,53 @@ st.markdown(
     .image-box:hover {
         border-color: #388E3C;
         background-color: #dcedc8;
-        transform: translateY(-3px); /* 增强悬停效果 */
+        transform: translateY(-3px);
     }
     
     .box-text {
         color: #2E7D32;
-        font-size: 1.2vw; /* 增大文字 */
+        font-size: 1.2vw;
         text-align: center;
         margin-top: 10px;
     }
     
     /* 加号样式 - 调整大小和位置 */
     .operator {
-        font-size: 2.5vw; /* 增大运算符 */
+        font-size: 2.5vw;
         color: #6b7280;
         font-weight: 300;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 60%;
+        height: 100%;
     }
     
-    /* 按钮容器 - 重新调整 */
+    /* 【修改1】按钮容器 - 移动到第三个框下面 */
     .button-container {
         display: flex;
         justify-content: center;
         margin-top: 2%;
         padding-top: 2%;
-        border-top: 1px solid #f0f0f0;
-        width: 60%;
+        width: 100%;
         box-sizing: border-box;
-        height: 10%; /* 固定按钮区域高度 */
+        height: 15%;
+        /* 【修改2】移除边框线 */
+        border-top: none;
     }
     
     .generate-button {
         background-color: #3b82f6;
         color: white;
         border: none;
-        border-radius: 10px; /* 增大圆角 */
+        border-radius: 10px;
         padding: 12px 30px;
-        font-size: 1.3vw; /* 增大按钮文字 */
+        font-size: 1.3vw;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 35%; /* 调整按钮宽度 */
+        width: 35%;
         max-width: 220px;
-        height: 60%; /* 相对于容器高度 */
+        height: 60%;
         box-sizing: border-box;
     }
     
@@ -193,11 +194,11 @@ st.markdown(
     .footer {
         text-align: center;
         color: #6b7280;
-        font-size: 0.9vw; /* 稍微增大底部文字 */
-        margin-top: 2%;
+        font-size: 0.9vw;
+        margin-top: 1%;
         width: 100%;
         box-sizing: border-box;
-        height: 5%; /* 固定底部区域高度 */
+        height: 5%;
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
@@ -251,15 +252,15 @@ st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 # 标题区域
 st.markdown('''
 <div class="title-section">
-    <div class="main-title">🎨 AI图片风格融合工具</div>
+    <div class="main-title">AI图片风格融合工具</div>
 </div>
 ''', unsafe_allow_html=True)
 
 # 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 使用Streamlit的columns创建横向布局 - 调整比例
-col1, col2, col3, col4, col5 = st.columns([26, 3, 26, 3, 26])  # 调整列比例
+# 使用Streamlit的columns创建横向布局
+col1, col2, col3, col4, col5 = st.columns([26, 3, 26, 3, 26])
 
 # 内容图片框
 with col1:
@@ -276,7 +277,6 @@ with col1:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -301,7 +301,6 @@ with col3:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -319,7 +318,6 @@ with col5:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3.5vw; color: #4CAF50;"></div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -327,9 +325,9 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片框容器
 
-# 生成按钮
+# 【修改3】生成按钮 - 现在在第三个框下面
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
-if st.button("🚀 一键生成风格融合", key="generate_btn", use_container_width=False):
+if st.button("一键生成风格融合", key="generate_btn", use_container_width=False):
     if content_image and style_image:
         # 模拟生成过程
         with st.spinner("正在生成融合图片..."):
