@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 明确三个层级
+# 自定义CSS - 修复三个问题
 st.markdown(
     """
     <style>
@@ -65,12 +65,9 @@ st.markdown(
         width: 70%;
         height: 70%;
         z-index: 2;
-        padding: 2%;
-        display: flex;
-        flex-direction: column;
     }
     
-    /* 第3层级：透明组件容器 - 大小位置与第2层级完全一致 */
+    /* 第3层级：透明组件容器 - 修复：添加overflow hidden限制内容 */
     .layer-2 {
         position: fixed;
         top: 50%;
@@ -82,16 +79,27 @@ st.markdown(
         padding: 2%;
         display: flex;
         flex-direction: column;
-        background-color: transparent; /* 完全透明 */
-        pointer-events: auto; /* 确保可以交互 */
+        background-color: transparent;
+        pointer-events: auto;
+        overflow: hidden !important; /* 修复1：限制内容在容器内 */
     }
     
-    /* 标题区域 - 在第3层级 */
+    /* 修复2：确保所有内容容器不可滚动 */
+    .layer-2-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden !important;
+    }
+    
+    /* 标题区域 - 修复3：确保标题在第3层级 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0; /* 防止标题被压缩 */
     }
     
     .main-title {
@@ -101,7 +109,7 @@ st.markdown(
         margin: 0;
     }
     
-    /* 图片框容器 - 在第3层级 */
+    /* 图片框容器 - 修复：添加overflow hidden */
     .image-container {
         flex: 1;
         display: flex;
@@ -109,9 +117,10 @@ st.markdown(
         align-items: center;
         gap: 2%;
         padding: 2%;
+        overflow: hidden !important; /* 防止内容溢出 */
     }
     
-    /* 单个图片框样式 - 在第3层级 */
+    /* 单个图片框样式 */
     .image-box {
         width: 28%;
         aspect-ratio: 3/2;
@@ -125,6 +134,7 @@ st.markdown(
         transition: all 0.3s ease;
         padding: 1%;
         position: relative;
+        flex-shrink: 0; /* 防止图片框被压缩 */
     }
     
     .image-box:hover {
@@ -139,20 +149,25 @@ st.markdown(
         margin-top: 8px;
     }
     
-    /* 加号样式 - 在第3层级 */
+    /* 加号样式 */
     .operator {
         font-size: 2vw;
         color: #6b7280;
         font-weight: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
     
-    /* 按钮容器 - 在第3层级 */
+    /* 按钮容器 */
     .button-container {
         display: flex;
         justify-content: center;
         margin-top: 1%;
         padding-top: 1%;
         border-top: 1px solid #f0f0f0;
+        flex-shrink: 0; /* 防止按钮被压缩 */
     }
     
     .generate-button {
@@ -167,6 +182,7 @@ st.markdown(
         transition: all 0.3s ease;
         width: 25%;
         max-width: 180px;
+        flex-shrink: 0;
     }
     
     .generate-button:hover {
@@ -174,18 +190,20 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部信息 - 在第3层级 */
+    /* 底部信息 */
     .footer {
         text-align: center;
         color: #6b7280;
         font-size: 0.8vw;
         margin-top: 1%;
+        flex-shrink: 0;
     }
     
-    /* 强制所有Streamlit组件在第3层级显示 */
+    /* 强制所有Streamlit组件在第3层级显示且不可滚动 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
         z-index: 3 !important;
+        overflow: hidden !important;
     }
     
     .stFileUploader label {
@@ -198,12 +216,19 @@ st.markdown(
         padding: 0 !important;
         width: 100%;
         height: 100%;
+        overflow: hidden !important;
     }
     
-    /* 确保所有列和块都在第3层级 */
+    /* 确保所有列和块都在第3层级且不可滚动 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
         position: relative !important;
         z-index: 3 !important;
+        overflow: hidden !important;
+    }
+    
+    /* 修复：防止Streamlit内部滚动 */
+    [data-testid="stVerticalBlock"] > div {
+        overflow: hidden !important;
     }
     
     /* 图片样式 */
@@ -223,10 +248,13 @@ st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 # 第2层级：白色工作区
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 
-# 第3层级：透明组件容器 - 所有交互组件放在这里
+# 第3层级：透明组件容器
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
-# 标题区域
+# 内部内容容器 - 确保所有内容被限制
+st.markdown('<div class="layer-2-content">', unsafe_allow_html=True)
+
+# 标题区域 - 现在应该在第3层级正确显示
 st.markdown('''
 <div class="title-section">
     <div class="main-title">🎨 AI图片风格融合工具</div>
@@ -327,7 +355,8 @@ st.markdown('''
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭第3层级
+# 关闭各容器
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2-content
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
 
 # 初始化session state
