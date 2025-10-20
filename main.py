@@ -4,13 +4,13 @@ import io
 
 # 页面配置 - 使用宽屏布局
 st.set_page_config(
-    page_title="AI画家 - 图片片风格融合",
+    page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 简化设计，确保横向布局
+# 自定义CSS - 只修复组件显示，保持原有布局
 st.markdown(
     """
     <style>
@@ -21,7 +21,7 @@ st.markdown(
         box-sizing: border-box;
     }
     
-    /* 确保页面占满整个屏幕 */
+    /* 确保页面占满整个屏幕且不可滚动 */
     html, body {
         height: 100vh;
         width: 100vw;
@@ -47,16 +47,19 @@ st.markdown(
         margin: 0 !important;
         max-width: 100% !important;
         overflow: hidden !important;
+        height: 100vh;
     }
     
     .main {
         padding: 0 !important;
+        height: 100vh;
+        overflow: hidden !important;
     }
     
     /* 层面0：灰色背景层 */
     .layer-0 {
         background-color: #808080;
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100vw;
@@ -69,7 +72,7 @@ st.markdown(
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -92,7 +95,7 @@ st.markdown(
     .main-title {
         font-size: 1.8vw;
         font-weight: bold;
-        color: #ff69b4; /* 粉红色红色 */
+        color: #ff69b4;
         margin: 0;
     }
     
@@ -110,24 +113,25 @@ st.markdown(
     .image-box {
         width: 28%;
         aspect-ratio: 3/2;
-        border: 2px dashed #4CAF50; /* 绿色边框 */
+        border: 2px dashed #4CAF50;
         border-radius: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #f1f8e9; /* 浅绿色背景 */
+        background-color: #f1f8e9;
         transition: all 0.3s ease;
         padding: 1%;
+        position: relative;
     }
     
     .image-box:hover {
-        border-color: #388E3C; /* 深绿色边框框 */
-        background-color: #dcedc8; /* 深一点的绿色背景 */
+        border-color: #388E3C;
+        background-color: #dcedc8;
     }
     
     .box-text {
-        color: #2E7D32; /* 绿色文字 */
+        color: #2E7D32;
         font-size: 1vw;
         text-align: center;
         margin-top: 8px;
@@ -150,7 +154,7 @@ st.markdown(
     }
     
     .generate-button {
-        background-color: #3b82f6; /* 蓝色按钮 */
+        background-color: #3b82f6;
         color: white;
         border: none;
         border-radius: 8px;
@@ -164,7 +168,7 @@ st.markdown(
     }
     
     .generate-button:hover {
-        background-color: #2563eb; /* 深蓝色按钮 */
+        background-color: #2563eb;
         transform: translateY(-2px);
     }
     
@@ -176,10 +180,12 @@ st.markdown(
         margin-top: 1%;
     }
     
-    /* 确保图片片上传组件正确显示 */
+    /* 关键修复：确保Streamlit组件在正确层级显示 */
     .stFileUploader {
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
+        position: relative !important;
+        z-index: 3 !important;
     }
     
     .stFileUploader label {
@@ -190,8 +196,21 @@ st.markdown(
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
-        width: 100%;
-        height: 100%;
+        width: 100% !important;
+        height: 100% !important;
+        position: relative !important;
+        z-index: 3 !important;
+    }
+    
+    /* 修复按钮显示 */
+    .stButton {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+    
+    .stButton button {
+        position: relative !important;
+        z-index: 3 !important;
     }
     
     /* 图片样式 */
@@ -199,6 +218,19 @@ st.markdown(
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
+        position: relative;
+        z-index: 3;
+    }
+    
+    /* 确保所有内容在正确层级 */
+    [data-testid="stVerticalBlock"] {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+    
+    .stColumn {
+        position: relative !important;
+        z-index: 3 !important;
     }
     </style>
     """,
@@ -302,13 +334,13 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
             st.success("风格融合完成！")
             st.rerun()
     else:
-        st.warning("请先先上传内容图和风格图")
+        st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # 底部信息
 st.markdown('''
 <div class="footer">
-    使用说明：上传内容图和风格图，点击一键生成按钮即可即可获得融合风格图
+    使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
 </div>
 ''', unsafe_allow_html=True)
 
