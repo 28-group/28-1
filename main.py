@@ -65,7 +65,7 @@ st.markdown(
         width: 66.666vw; /* 使用vw单位确保相对宽度 */
         height: 66.666vh; /* 使用vh单位确保相对高度 */
         z-index: 2;
-        padding: 1% 2%;
+        padding: 2%;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -75,7 +75,7 @@ st.markdown(
     /* 标题区域 */
     .title-section {
         text-align: center;
-        margin-bottom: 0 0 2% 0;
+        margin: 0 0 2% 0;
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
     }
