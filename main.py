@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 明确三个层级
+# 自定义CSS - 简化为两个层级
 st.markdown(
     """
     <style>
@@ -53,7 +53,7 @@ st.markdown(
         z-index: 1;
     }
     
-    /* 第2层级：白色工作区 */
+    /* 【修改】第2层级：白色工作区 - 现在直接包含所有组件 */
     .layer-1 {
         background-color: white;
         border-radius: 15px;
@@ -68,25 +68,11 @@ st.markdown(
         padding: 2%;
         display: flex;
         flex-direction: column;
+        /* 移除第3层级后，确保组件正常显示 */
+        overflow: auto; /* 允许内部滚动（如果需要） */
     }
     
-    /* 第3层级：透明组件容器 - 大小位置与第2层级完全一致 */
-    .layer-2 {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 70%;
-        height: 70%;
-        z-index: 3;
-        padding: 2%;
-        display: flex;
-        flex-direction: column;
-        background-color: transparent; /* 完全透明 */
-        pointer-events: auto; /* 确保可以交互 */
-    }
-    
-    /* 标题区域 - 在第3层级 */
+    /* 【修改】所有组件样式 - 移除z-index限制，现在都在第2层级内 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -101,7 +87,6 @@ st.markdown(
         margin: 0;
     }
     
-    /* 图片框容器 - 在第3层级 */
     .image-container {
         flex: 1;
         display: flex;
@@ -111,7 +96,6 @@ st.markdown(
         padding: 2%;
     }
     
-    /* 单个图片框样式 - 在第3层级 */
     .image-box {
         width: 28%;
         aspect-ratio: 3/2;
@@ -139,14 +123,12 @@ st.markdown(
         margin-top: 8px;
     }
     
-    /* 加号样式 - 在第3层级 */
     .operator {
         font-size: 2vw;
         color: #6b7280;
         font-weight: 300;
     }
     
-    /* 按钮容器 - 在第3层级 */
     .button-container {
         display: flex;
         justify-content: center;
@@ -174,7 +156,6 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部信息 - 在第3层级 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -182,10 +163,10 @@ st.markdown(
         margin-top: 1%;
     }
     
-    /* 强制所有Streamlit组件在第3层级显示 */
+    /* 【修改】简化Streamlit组件样式 - 移除z-index限制 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
-        z-index: 3 !important;
+        /* 移除 z-index: 3 !important; */
     }
     
     .stFileUploader label {
@@ -200,13 +181,12 @@ st.markdown(
         height: 100%;
     }
     
-    /* 确保所有列和块都在第3层级 */
+    /* 【修改】简化布局组件样式 */
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
         position: relative !important;
-        z-index: 3 !important;
+        /* 移除 z-index: 3 !important; */
     }
     
-    /* 图片样式 */
     img {
         max-width: 100%;
         max-height: 100%;
@@ -220,20 +200,19 @@ st.markdown(
 # 第1层级：灰色背景
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 
-# 第2层级：白色工作区
-st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
+# 【修改】第2层级：白色工作区 - 现在直接包含所有组件
+st.markdown('<div class="layer-1">', unsafe_allow_html=True)
 
-# 第3层级：透明组件容器 - 所有交互组件放在这里
-st.markdown('<div class="layer-2">', unsafe_allow_html=True)
+# 【删除】移除第3层级容器
 
-# 标题区域
+# 标题区域 - 现在直接在第2层级内
 st.markdown('''
 <div class="title-section">
-    <div class="main-title"> AI图片风格融合工具</div>
+    <div class="main-title">AI图片风格融合工具</div>
 </div>
 ''', unsafe_allow_html=True)
 
-# 图片框容器
+# 图片框容器 - 现在直接在第2层级内
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 使用Streamlit的columns创建横向布局
@@ -254,7 +233,6 @@ with col1:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
             <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -279,7 +257,6 @@ with col3:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
             <div class="box-text">风格图片</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -297,7 +274,6 @@ with col5:
     else:
         st.markdown('''
         <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
             <div class="box-text">融合结果</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -305,7 +281,7 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片框容器
 
-# 生成按钮
+# 生成按钮 - 现在直接在第2层级内
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
 if st.button("一键生成", key="generate_btn", use_container_width=False):
     if content_image and style_image:
@@ -320,15 +296,15 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
         st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 底部信息
+# 底部信息 - 现在直接在第2层级内
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭第3层级
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
+# 【修改】只关闭第2层级（移除第3层级的关闭）
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-1（第2层级）
 
 # 初始化session state
 if 'result_image' not in st.session_state:
