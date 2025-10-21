@@ -229,7 +229,7 @@ st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 # 标题区域
 st.markdown('''
 <div class="title-section">
-    <div class="main-title">🎨 AI图片风格融合工具</div>
+    <div class="main-title"> AI图片风格融合工具</div>
 </div>
 ''', unsafe_allow_html=True)
 
