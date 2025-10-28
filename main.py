@@ -145,7 +145,7 @@ st.markdown(
     
     /* 加号运算符样式 */
     .operator {
-        font-size: 10vw;                 /* 响应式字体大小 */
+        font-size: 5vw;                 /* 响应式字体大小 */
         color: #6b7280;                 /* 灰色 */
         font-weight: 300;               /* 细字体 */
     }
