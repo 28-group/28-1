@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 import io
-
+#test wu hao ming lai le
 # 页面配置
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
