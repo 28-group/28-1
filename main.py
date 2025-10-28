@@ -1,8 +1,14 @@
 # app.py
 import streamlit as st
 from PIL import Image
+<<<<<<< HEAD
 
 # ---------- 页面级配置 ----------
+=======
+import io
+#test wu hao ming lai le
+# 页面配置
+>>>>>>> 5f9ef77e5845ac16c7e6c8447e58e1df3fe9c060
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
