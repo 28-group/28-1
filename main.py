@@ -147,7 +147,7 @@ st.markdown(
     .operator {
         font-size: 4vw;                 /* 响应式字体大小 */
         color: #6b7280;                 /* 灰色 */
-        font-weight: 300;               /* 细字体 */
+        font-weight: 400;               /* 细字体 */
     }
     
     /* 按钮容器样式 */
@@ -204,8 +204,8 @@ st.markdown(
         border: none !important;        /* 无边框 */
         background-color: transparent !important;  /* 透明背景 */
         padding: 0 !important;          /* 无内边距 */
-        width: 75%;                    /* 宽度100% */
-        height: 75%;                   /* 高度100% */
+        width: 75%;                    /* 宽度75% */
+        height: 75%;                   /* 高度75% */
     }
     
     /* 确保所有列和块都在第3层级 */
@@ -246,7 +246,7 @@ st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 使用Streamlit的columns创建横向布局
 # 比例分配：内容图片框(1) | 加号(0.05) | 风格图片框(1) | 等号(0.05) | 结果图片框(1)
-col1, col2, col3, col4, col5 = st.columns([0.5, 0.05, 0.5 0.05, 0.5])
+col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
 # 内容图片框 - 第一个图片上传区域
 with col1:
