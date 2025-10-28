@@ -216,7 +216,7 @@ st.markdown(
     
     /* 图片通用样式 */
     img {
-        max-width: 15%;                /* 最大宽度100% */
+        max-width: 20%;                /* 最大宽度100% */
         max-height: 25%;               /* 最大高度100% */
         object-fit: contain;            /* 保持图片比例完整显示 */
     }
