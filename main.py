@@ -37,48 +37,45 @@ st.markdown(
         z-index: 1;
     }
     .white-panel {
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 80vw;
+        width: 90vw;
+        max-width: 1200px;
         height: 90vh;
+        max-height: 800px;
         background: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
         z-index: 2;
         display: flex;
         flex-direction: column;
-        padding: 2%;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
         overflow: hidden;
     }
     .title-section {
         text-align: center;
-        margin-bottom: 2%;
-        padding-bottom: 1%;
-        border-bottom: 1px solid #f0f0f0;
-        flex-shrink: 0;
+        margin-bottom: 20px;
     }
     .main-title {
-        font-size: 1.8vw;
+        font-size: 24px;
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
     }
     .image-container {
-        flex: 1;
         display: flex;
         justify-content: space-around;
         align-items: center;
-        gap: 2%;
-        padding: 2%;
-        min-height: 0;
-        overflow: hidden;
+        width: 100%;
+        margin-bottom: 20px;
     }
     .image-box {
         width: 30%;
-        height: 100%;
-        min-height: 150px;
+        height: 300px;
         border: 2px dashed #4CAF50;
         border-radius: 10px;
         display: flex;
@@ -87,7 +84,7 @@ st.markdown(
         justify-content: center;
         background-color: #f1f8e9;
         transition: all 0.3s ease;
-        padding: 1%;
+        padding: 20px;
         position: relative;
         overflow: hidden;
     }
@@ -97,14 +94,14 @@ st.markdown(
     }
     .box-text {
         color: #2E7D32;
-        font-size: 1vw;
+        font-size: 16px;
         text-align: center;
         margin-top: 8px;
         z-index: 10;
         position: relative;
     }
     .operator {
-        font-size: 2vw;
+        font-size: 24px;
         color: #6b7280;
         font-weight: 300;
         display: flex;
@@ -115,23 +112,20 @@ st.markdown(
     .button-container {
         display: flex;
         justify-content: center;
-        margin-top: auto;
-        padding-top: 1%;
-        border-top: 1px solid #f0f0f0;
-        flex-shrink: 0;
+        width: 100%;
+        margin-top: 20px;
     }
     .generate-button {
         background-color: #3b82f6;
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 0.8% 2%;
-        font-size: 1.1vw;
+        padding: 10px 20px;
+        font-size: 16px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 25%;
-        max-width: 180px;
+        width: 200px;
     }
     .generate-button:hover {
         background-color: #2563eb;
@@ -140,9 +134,8 @@ st.markdown(
     .footer {
         text-align: center;
         color: #6b7280;
-        font-size: 0.8vw;
-        margin-top: 1%;
-        flex-shrink: 0;
+        font-size: 14px;
+        margin-top: 20px;
     }
     </style>
     """,
@@ -242,4 +235,3 @@ st.markdown('</div>', unsafe_allow_html=True)
 # 初始化session state
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
-           
