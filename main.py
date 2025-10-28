@@ -113,8 +113,9 @@ st.markdown(
     
     /* 单个图片框样式 - 在第3层级 */
     .image-box {
-        width: 28%;
-        aspect-ratio: 3/2;
+        height: 28%;
+        width:auto;
+        aspect-ratio: 2/3;
         border: 2px dashed #4CAF50;
         border-radius: 10px;
         display: flex;
