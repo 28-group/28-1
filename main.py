@@ -246,7 +246,7 @@ st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 使用Streamlit的columns创建横向布局
 # 比例分配：内容图片框(1) | 加号(0.05) | 风格图片框(1) | 等号(0.05) | 结果图片框(1)
-col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
+col1, col2, col3, col4, col5 = st.columns([0.5, 0.05, 0.5 0.05, 0.5])
 
 # 内容图片框 - 第一个图片上传区域
 with col1:
