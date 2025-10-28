@@ -74,24 +74,29 @@ st.markdown(
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
     position: fixed;
-    top: 5%;            /* 相同的top */
-    left: 15%;          /* 相同的left */
-    width: 70%;         /* 相同的width */
-    height: 80%;        /* 相同的height */
+    top: 5%;
+    left: 15%;
+    width: 70%;
+    height: 80%;
     z-index: 3;
-    padding: 2%;        /* 相同的padding */
+    padding: 2%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;  /* 内容从顶部开始 */
+    align-items: stretch;         /* 拉伸子元素宽度 */
+    overflow: visible;           /* 允许内容显示 */
     background-color: transparent;
     pointer-events: auto;
     }
 
-    /* 标题区域样式 - 位于第3层级 */
+    /* 确保标题区域可见 */
     .title-section {
-        text-align: center;              /* 文字居中 */
-        margin-bottom: 2%;              /* 底部外边距 */
-        padding-bottom: 1%;             /* 底部内边距 */
-        border-bottom: 1px solid #f0f0f0; /* 底部边框线 */
+    flex: 0 0 auto;             /* 不伸缩，固定大小 */
+    text-align: center;
+    margin-bottom: 2%;
+    padding-bottom: 1%;
+    border-bottom: 1px solid #f0f0f0;
+    min-height: 50px;           /* 最小高度确保显示 */
     }
     
     /* 主标题样式 */
@@ -102,14 +107,15 @@ st.markdown(
         margin: 0;                      /* 清除外边距 */
     }
     
-    /* 图片框容器样式 - 位于第3层级 */
+    /* 图片容器占据剩余空间 */
     .image-container {
-        flex: 1;                        /* 占据剩余空间 */
-        display: flex;                  /* 弹性布局 */
-        justify-content: center;        /* 水平居中 */
-        align-items: center;            /* 垂直居中 */
-        gap: 2%;                       /* 元素间距 */
-        padding: 2%;                   /* 内边距 */
+    flex: 1;                    /* 占据剩余空间 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2%;
+    padding: 2%;
+    min-height: 0;              /* 允许收缩 */
     }
     
     /* 单个图片框样式 */
@@ -179,12 +185,14 @@ st.markdown(
         transform: translateY(-2px);    /* 悬停时向上移动2像素 */
     }
     
-    /* 底部信息样式 */
+    /* 底部信息固定位置 */
     .footer {
-        text-align: center;              /* 文字居中 */
-        color: #6b7280;                 /* 灰色文字 */
-        font-size: 0.8vw;               /* 响应式小字体 */
-        margin-top: 1%;                 /* 顶部外边距 */
+    flex: 0 0 auto;             /* 不伸缩，固定大小 */
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.8vw;
+    margin-top: 1%;
+    min-height: 30px;           /* 最小高度确保显示 */
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
