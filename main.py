@@ -204,8 +204,8 @@ st.markdown(
         border: none !important;        /* 无边框 */
         background-color: transparent !important;  /* 透明背景 */
         padding: 0 !important;          /* 无内边距 */
-        width: 100%;                    /* 宽度100% */
-        height: 100%;                   /* 高度100% */
+        width: 50%;                    /* 宽度100% */
+        height: 50%;                   /* 高度100% */
     }
     
     /* 确保所有列和块都在第3层级 */
