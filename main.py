@@ -4,7 +4,7 @@ import time
 
 # 页面配置
 st.set_page_config(
-    page_title="AI画家 - 图片风格融合",
+    page_title="AI 图片风格融合工具",
     page_icon="🎨",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -41,8 +41,8 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 70vw;
-        height: 70vh;
+        width: 80vw;
+        height: 90vh;
         background: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
@@ -68,7 +68,7 @@ st.markdown(
     .image-container {
         flex: 1;
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         align-items: center;
         gap: 2%;
         padding: 2%;
@@ -76,7 +76,7 @@ st.markdown(
         overflow: hidden;
     }
     .image-box {
-        width: 28%;
+        width: 30%;
         height: 100%;
         min-height: 150px;
         border: 2px dashed #4CAF50;
@@ -166,16 +166,15 @@ st.markdown('''
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 使用Streamlit的columns创建横向布局
-col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
+col1, col2, col3 = st.columns([1, 1, 1])
 
 # 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
-        "上传内容图片",
+        "内容图片",
         type=['png', 'jpg', 'jpeg'],
-        key="content",
-        label_visibility="collapsed"
+        key="content"
     )
     if content_image:
         try:
@@ -187,18 +186,13 @@ with col1:
         st.markdown('<div class="box-text">内容图片</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号1
-with col2:
-    st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
-
 # 风格图片框
-with col3:
+with col2:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
-        "上传风格图片", 
+        "风格图片", 
         type=['png', 'jpg', 'jpeg'],
-        key="style",
-        label_visibility="collapsed"
+        key="style"
     )
     if style_image:
         try:
@@ -210,12 +204,8 @@ with col3:
         st.markdown('<div class="box-text">风格图片</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号2
-with col4:
-    st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
-
 # 结果图片框
-with col5:
+with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     if 'result_image' in st.session_state and st.session_state.result_image:
         st.image(st.session_state.result_image, use_column_width=True)
