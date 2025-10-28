@@ -73,18 +73,18 @@ st.markdown(
     
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
-        position: fixed;                 /* 固定定位 */
-        top: 50%;                       /* 垂直居中 */
-        left: 50%;                      /* 水平居中 */
-        transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 70%;                     /* 宽度与第2层级一致 */
-        height: 70%;                    /* 高度与第2层级一致 */
-        z-index: 3;                     /* 层级为3（最上层） */
-        padding: 2%;                    /* 内边距 */
-        display: flex;                  /* 弹性布局 */
-        flex-direction: column;         /* 垂直方向排列 */
-        background-color: transparent;  /* 完全透明背景 */
-        pointer-events: auto;           /* 确保可以接收鼠标事件 */
+    position: fixed;
+    top: 5%;           /* 从顶部5%开始 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 90%;       /* 改为90%高度 */
+    z-index: 3;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    pointer-events: auto;
     }
     
     /* 标题区域样式 - 位于第3层级 */
