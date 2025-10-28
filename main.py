@@ -204,7 +204,7 @@ st.markdown(
         border: none !important;        /* 无边框 */
         background-color: transparent !important;  /* 透明背景 */
         padding: 0 !important;          /* 无内边距 */
-        width: none;                    /* 宽度100% */
+        width: 75%;                    /* 宽度100% */
         height: 75%;                   /* 高度100% */
     }
     
