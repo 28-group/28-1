@@ -234,6 +234,13 @@ st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 # 第3层级：透明组件容器 - 创建最上层的透明容器，所有交互组件放在这里
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
+# ↓↓↓ 在这里添加调试边框代码 ↓↓↓
+st.markdown('''
+<div style="border: 2px solid red; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; pointer-events: none;">
+</div>
+''', unsafe_allow_html=True)
+# ↑↑↑ 调试代码添加结束 ↑↑↑
+
 # 标题区域 - 显示应用主标题
 st.markdown('''
 <div class="title-section">
