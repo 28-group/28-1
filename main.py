@@ -186,6 +186,7 @@ st.markdown(
         color: #6b7280;                 /* 灰色文字 */
         font-size: 0.8vw;               /* 响应式小字体 */
         margin-top: 1%;                 /* 顶部外边距 */
+        z-index: 3 !important;          /* 层级为3 */
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
