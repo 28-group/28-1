@@ -56,34 +56,33 @@ st.markdown(
     
     /* 第2层级：白色工作区 - 中间层 */
     .layer-1 {
-        background-color: white;         /* 白色背景 */
-        border-radius: 15px;             /* 圆角边框 */
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);  /* 阴影效果 */
-        position: fixed;                 /* 固定定位 */
-        top: 50%;                       /* 垂直居中 */
-        left: 50%;                      /* 水平居中 */
-        transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 70%;                     /* 宽度为视口的70% */
-        height: 70%;                    /* 高度为视口的70% */
-        z-index: 2;                     /* 层级为2（中间层） */
-        padding: 2%;                    /* 内边距 */
-        display: flex;                  /* 弹性布局 */
-        flex-direction: column;         /* 垂直方向排列 */
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 80%;        /* 也改为80%匹配第3层级 */
+    z-index: 2;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
     }
     
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
     position: fixed;
-    top: 5vh;          /* 使用视口高度单位 */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70vw;       /* 使用视口宽度单位 */
-    height: 90vh;      /* 使用视口高度单位 */
+    top: 5%;
+    left: 15%;
+    width: 70%;
+    height: 80% !important;    /* 强制80%高度 */
     z-index: 3;
     padding: 2%;
     display: flex;
     flex-direction: column;
-    background-color: transparent;
+    background-color: rgba(0,0,255,0.1) !important;  /* 临时蓝色背景 */
     pointer-events: auto;
     }
     
