@@ -74,18 +74,18 @@ st.markdown(
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
     position: fixed;
-    top: 5%;
-    left: 15%;
-    width: 70%;
-    height: 80% !important;    /* 强制80%高度 */
+    top: 5%;            /* 相同的top */
+    left: 15%;          /* 相同的left */
+    width: 70%;         /* 相同的width */
+    height: 80%;        /* 相同的height */
     z-index: 3;
-    padding: 2%;
+    padding: 2%;        /* 相同的padding */
     display: flex;
     flex-direction: column;
-    background-color: rgba(0,0,255,0.1) !important;  /* 临时蓝色背景 */
+    background-color: transparent;
     pointer-events: auto;
     }
-    
+
     /* 标题区域样式 - 位于第3层级 */
     .title-section {
         text-align: center;              /* 文字居中 */
