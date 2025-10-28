@@ -74,11 +74,11 @@ st.markdown(
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
     position: fixed;
-    top: 5%;           /* 从顶部5%开始 */
+    top: 5vh;          /* 使用视口高度单位 */
     left: 50%;
     transform: translateX(-50%);
-    width: 70%;
-    height: 90%;       /* 改为90%高度 */
+    width: 70vw;       /* 使用视口宽度单位 */
+    height: 90vh;      /* 使用视口高度单位 */
     z-index: 3;
     padding: 2%;
     display: flex;
