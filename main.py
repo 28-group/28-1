@@ -290,9 +290,6 @@ with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
 # 结果图片框
-# 结果图片框
-# 结果图片框 - 使用特殊容器
-# 结果图片框
 with col5:
     # 创建一个垂直容器来放置图片框和按钮
     with st.container():
