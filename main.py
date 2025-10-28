@@ -56,47 +56,43 @@ st.markdown(
     
     /* 第2层级：白色工作区 - 中间层 */
     .layer-1 {
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: 80%;        /* 也改为80%匹配第3层级 */
-    z-index: 2;
-    padding: 2%;
-    display: flex;
-    flex-direction: column;
+        background-color: white;         /* 白色背景 */
+        border-radius: 15px;             /* 圆角边框 */
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);  /* 阴影效果 */
+        position: fixed;                 /* 固定定位 */
+        top: 50%;                       /* 垂直居中 */
+        left: 50%;                      /* 水平居中 */
+        transform: translate(-50%, -50%); /* 精确居中定位 */
+        width: 70%;                     /* 宽度为视口的70% */
+        height: 70%;                    /* 高度为视口的70% */
+        z-index: 2;                     /* 层级为2（中间层） */
+        padding: 2%;                    /* 内边距 */
+        display: flex;                  /* 弹性布局 */
+        flex-direction: column;         /* 垂直方向排列 */
     }
     
     /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
-    position: fixed;
-    top: 5%;
-    left: 15%;
-    width: 70%;
-    height: 80%;
-    z-index: 3;
-    padding: 2%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;  /* 内容从顶部开始 */
-    align-items: stretch;         /* 拉伸子元素宽度 */
-    overflow: visible;           /* 允许内容显示 */
-    background-color: transparent;
-    pointer-events: auto;
+        position: fixed;                 /* 固定定位 */
+        top: 50%;                       /* 垂直居中 */
+        left: 50%;                      /* 水平居中 */
+        transform: translate(-50%, -50%); /* 精确居中定位 */
+        width: 70%;                     /* 宽度与第2层级一致 */
+        height: 70%;                    /* 高度与第2层级一致 */
+        z-index: 3;                     /* 层级为3（最上层） */
+        padding: 2%;                    /* 内边距 */
+        display: flex;                  /* 弹性布局 */
+        flex-direction: column;         /* 垂直方向排列 */
+        background-color: transparent;  /* 完全透明背景 */
+        pointer-events: auto;           /* 确保可以接收鼠标事件 */
     }
-
-    /* 确保标题区域可见 */
+    
+    /* 标题区域样式 - 位于第3层级 */
     .title-section {
-    flex: 0 0 auto;             /* 不伸缩，固定大小 */
-    text-align: center;
-    margin-bottom: 2%;
-    padding-bottom: 1%;
-    border-bottom: 1px solid #f0f0f0;
-    min-height: 50px;           /* 最小高度确保显示 */
+        text-align: center;              /* 文字居中 */
+        margin-bottom: 2%;              /* 底部外边距 */
+        padding-bottom: 1%;             /* 底部内边距 */
+        border-bottom: 1px solid #f0f0f0; /* 底部边框线 */
     }
     
     /* 主标题样式 */
@@ -107,15 +103,14 @@ st.markdown(
         margin: 0;                      /* 清除外边距 */
     }
     
-    /* 图片容器占据剩余空间 */
+    /* 图片框容器样式 - 位于第3层级 */
     .image-container {
-    flex: 1;                    /* 占据剩余空间 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2%;
-    padding: 2%;
-    min-height: 0;              /* 允许收缩 */
+        flex: 1;                        /* 占据剩余空间 */
+        display: flex;                  /* 弹性布局 */
+        justify-content: center;        /* 水平居中 */
+        align-items: center;            /* 垂直居中 */
+        gap: 2%;                       /* 元素间距 */
+        padding: 2%;                   /* 内边距 */
     }
     
     /* 单个图片框样式 */
@@ -150,7 +145,7 @@ st.markdown(
     
     /* 加号运算符样式 */
     .operator {
-        font-size: 5vw;                 /* 响应式字体大小 */
+        font-size: 2vw;                 /* 响应式字体大小 */
         color: #6b7280;                 /* 灰色 */
         font-weight: 300;               /* 细字体 */
     }
@@ -185,14 +180,12 @@ st.markdown(
         transform: translateY(-2px);    /* 悬停时向上移动2像素 */
     }
     
-    /* 底部信息固定位置 */
+    /* 底部信息样式 */
     .footer {
-    flex: 0 0 auto;             /* 不伸缩，固定大小 */
-    text-align: center;
-    color: #6b7280;
-    font-size: 0.8vw;
-    margin-top: 1%;
-    min-height: 30px;           /* 最小高度确保显示 */
+        text-align: center;              /* 文字居中 */
+        color: #6b7280;                 /* 灰色文字 */
+        font-size: 0.8vw;               /* 响应式小字体 */
+        margin-top: 1%;                 /* 顶部外边距 */
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
