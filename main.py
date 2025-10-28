@@ -75,7 +75,7 @@ st.markdown(
     .layer-2 {
         position: fixed;                 /* 固定定位 */
         top: 50%;                       /* 垂直居中 */
-        left: 60%;                      /* 水平居中 */
+        left: 20%;                      /* 水平居中 */
         transform: translate(-50%, -50%); /* 精确居中定位 */
         width: 70%;                     /* 宽度与第2层级一致 */
         height: 70%;                    /* 高度与第2层级一致 */
