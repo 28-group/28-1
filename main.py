@@ -1,21 +1,36 @@
+您说得对！之前的方案确实经常出现组件不固定的问题。让我分析一下当前设计的固定性：
+
+## 当前设计的固定性分析：
+
+### ✅ **真正固定的部分：**
+- 页面整体容器 (`stApp`) - 完全固定，禁止滚动
+- 灰色背景 - 固定全屏
+- 白色工作区 (`.main-workspace`) - 绝对定位居中固定
+
+### ⚠️ **可能不固定的风险点：**
+Streamlit组件本身有自带的布局行为，可能会破坏固定效果。
+
+## 更彻底的固定方案：
+
+```python
 import streamlit as st
 from PIL import Image
 import io
 
-# 页面配置 - 使用宽屏布局
+# 页面配置
 st.set_page_config(
     page_title="AI画家 - 图片风格融合",
     page_icon="🎨",
-    layout="wide",
+    layout="wide", 
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 简化为两个层级
+# 更严格的固定CSS
 st.markdown(
     """
     <style>
-    /* 彻底禁止页面滑动 */
-    html, body, #root, [data-testid="stAppViewContainer"] {
+    /* 彻底锁定整个页面 */
+    html, body, #root, [data-testid="stAppViewContainer"], .stApp {
         height: 100vh !important;
         width: 100vw !important;
         overflow: hidden !important;
@@ -24,69 +39,59 @@ st.markdown(
         left: 0 !important;
         margin: 0 !important;
         padding: 0 !important;
+        background-color: #808080 !important;
     }
     
-    .stApp {
-        height: 100vh !important;
-        width: 100vw !important;
-        overflow: hidden !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+    /* 隐藏所有可能破坏布局的元素 */
+    #MainMenu {visibility: hidden !important; height: 0 !important;}
+    footer {visibility: hidden !important; height: 0 !important;}
+    header {visibility: hidden !important; height: 0 !important;}
+    .stDeployButton {display: none !important;}
     
-    /* 隐藏Streamlit默认元素 */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    
-    /* 第1层级：灰色背景层 */
-    .layer-0 {
-        background-color: #808080;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 1;
-    }
-    
-    /* 【修改】第2层级：白色工作区 - 现在直接包含所有组件 */
-    .layer-1 {
+    /* 主工作区 - 绝对固定 */
+    .main-workspace {
         background-color: white;
         border-radius: 15px;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 70%;
-        height: 70%;
-        z-index: 2;
+        width: 85vw;
+        height: 85vh;
+        z-index: 1000;
         padding: 2%;
         display: flex;
         flex-direction: column;
-        /* 移除第3层级后，确保组件正常显示 */
-        overflow: auto; /* 允许内部滚动（如果需要） */
+        /* 防止内部内容溢出 */
+        overflow: hidden !important;
     }
     
-    /* 【修改】所有组件样式 - 移除z-index限制，现在都在第2层级内 */
+    /* 锁定内部布局结构 */
+    .workspace-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+    
     .title-section {
         text-align: center;
         margin-bottom: 2%;
         padding-bottom: 1%;
         border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0;
     }
     
     .main-title {
-        font-size: 1.8vw;
+        font-size: 2rem;
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
     }
     
+    /* 图片区域 - 固定高度 */
     .image-container {
         flex: 1;
         display: flex;
@@ -94,11 +99,14 @@ st.markdown(
         align-items: center;
         gap: 2%;
         padding: 2%;
+        min-height: 0;
+        height: 60vh; /* 固定高度 */
+        overflow: hidden;
     }
     
     .image-box {
         width: 28%;
-        aspect-ratio: 3/2;
+        height: 100%;
         border: 2px dashed #4CAF50;
         border-radius: 10px;
         display: flex;
@@ -106,35 +114,63 @@ st.markdown(
         align-items: center;
         justify-content: center;
         background-color: #f1f8e9;
-        transition: all 0.3s ease;
-        padding: 1%;
         position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
     }
     
-    .image-box:hover {
-        border-color: #388E3C;
-        background-color: #dcedc8;
+    /* 强制Streamlit组件遵守固定布局 */
+    [data-testid="stAppViewContainer"] > div {
+        position: fixed !important;
+        width: 100vw !important;
+        height: 100vh !important;
     }
     
-    .box-text {
-        color: #2E7D32;
-        font-size: 1vw;
-        text-align: center;
-        margin-top: 8px;
+    /* 列布局锁定 */
+    .stColumn {
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        position: relative !important;
+        overflow: hidden !important;
     }
     
-    .operator {
-        font-size: 2vw;
-        color: #6b7280;
-        font-weight: 300;
+    /* 文件上传器完全锁定在图片框内 */
+    .stFileUploader {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 1002 !important;
     }
     
+    .stFileUploader > section {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .stFileUploader > section > div {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* 按钮区域固定 */
     .button-container {
         display: flex;
         justify-content: center;
-        margin-top: 1%;
-        padding-top: 1%;
+        margin-top: auto;
+        padding-top: 2%;
         border-top: 1px solid #f0f0f0;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1002;
     }
     
     .generate-button {
@@ -142,153 +178,92 @@ st.markdown(
         color: white;
         border: none;
         border-radius: 8px;
-        padding: 0.8% 2%;
-        font-size: 1.1vw;
+        padding: 12px 24px;
+        font-size: 1.1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
-        width: 25%;
-        max-width: 180px;
+        min-width: 150px;
     }
     
-    .generate-button:hover {
-        background-color: #2563eb;
-        transform: translateY(-2px);
-    }
-    
-    .footer {
-        text-align: center;
-        color: #6b7280;
-        font-size: 0.8vw;
-        margin-top: 1%;
-    }
-    
-    /* 【修改】简化Streamlit组件样式 - 移除z-index限制 */
-    .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
-        position: relative !important;
-        /* 移除 z-index: 3 !important; */
-    }
-    
-    .stFileUploader label {
+    /* 彻底禁用任何滚动条 */
+    ::-webkit-scrollbar {
         display: none !important;
     }
     
-    .stFileUploader div {
-        border: none !important;
-        background-color: transparent !important;
-        padding: 0 !important;
-        width: 100%;
-        height: 100%;
-    }
-    
-    /* 【修改】简化布局组件样式 */
-    .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
-        position: relative !important;
-        /* 移除 z-index: 3 !important; */
-    }
-    
-    img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
+    /* 响应式锁定 - 确保在小屏幕上也固定 */
+    @media (max-height: 600px) {
+        .main-workspace {
+            height: 95vh !important;
+            width: 95vw !important;
+        }
+        .image-container {
+            height: 50vh !important;
+        }
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# 第1层级：灰色背景
-st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
+# 创建完全固定的布局
+st.markdown('<div class="main-workspace">', unsafe_allow_html=True)
+st.markdown('<div class="workspace-content">', unsafe_allow_html=True)
 
-# 【修改】第2层级：白色工作区 - 现在直接包含所有组件
-st.markdown('<div class="layer-1">', unsafe_allow_html=True)
-
-# 【删除】移除第3层级容器
-
-# 标题区域 - 现在直接在第2层级内
+# 标题
 st.markdown('''
 <div class="title-section">
     <div class="main-title">AI图片风格融合工具</div>
 </div>
 ''', unsafe_allow_html=True)
 
-# 图片框容器 - 现在直接在第2层级内
+# 图片区域 - 使用固定布局
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 使用Streamlit的columns创建横向布局
-col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
+col1, col2, col3, col4, col5 = st.columns([1, 0.1, 1, 0.1, 1])
 
-# 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    content_image = st.file_uploader(
-        "内容图片",
-        type=['png', 'jpg', 'jpeg'],
-        key="content",
-        label_visibility="collapsed"
-    )
+    content_image = st.file_uploader("内容图片", type=['png', 'jpg', 'jpeg'], key="content", label_visibility="collapsed")
     if content_image:
         image = Image.open(content_image)
-        st.image(image)
+        st.image(image, use_column_width=True)
     else:
-        st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div class="box-text">内容图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
+        st.markdown('<div class="box-text">内容图片</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号1
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-# 风格图片框
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    style_image = st.file_uploader(
-        "风格图片", 
-        type=['png', 'jpg', 'jpeg'],
-        key="style",
-        label_visibility="collapsed"
-    )
+    style_image = st.file_uploader("风格图片", type=['png', 'jpg', 'jpeg'], key="style", label_visibility="collapsed")
     if style_image:
         image = Image.open(style_image)
-        st.image(image)
+        st.image(image, use_column_width=True)
     else:
-        st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div class="box-text">风格图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
+        st.markdown('<div class="box-text">风格图片</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号2
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框
 with col5:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     if 'result_image' in st.session_state and st.session_state.result_image:
-        st.image(st.session_state.result_image, caption="融合结果")
+        st.image(st.session_state.result_image, use_column_width=True)
     else:
-        st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div class="box-text">融合结果</div>
-        </div>
-        ''', unsafe_allow_html=True)
+        st.markdown('<div class="box-text">融合结果</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片框容器
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片容器
 
-# 生成按钮 - 现在直接在第2层级内
+# 按钮区域
 st.markdown('<div class="button-container">', unsafe_allow_html=True)
-if st.button("一键生成", key="generate_btn", use_container_width=False):
+if st.button("🎨 一键生成", key="generate_btn", use_container_width=True):
     if content_image and style_image:
-        # 模拟生成过程
-        with st.spinner("正在生成融合图片..."):
-            # 这里添加实际的风格融合代码
-            # 暂时使用占位图
+        with st.spinner("AI正在创作中..."):
+            import time
+            time.sleep(2)
             st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
             st.success("风格融合完成！")
             st.rerun()
@@ -296,19 +271,20 @@ if st.button("一键生成", key="generate_btn", use_container_width=False):
         st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
 
-# 底部信息 - 现在直接在第2层级内
+# 底部信息
 st.markdown('''
 <div class="footer">
-    使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
+    💡 上传内容图片和风格图片，点击生成按钮获得融合结果
 </div>
 ''', unsafe_allow_html=True)
 
-# 【修改】只关闭第2层级（移除第3层级的关闭）
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-1（第2层级）
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭workspace-content
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭main-workspace
 
-# 初始化session state
+# 初始化
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
+
 
 
 
