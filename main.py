@@ -305,21 +305,19 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭图片框容器
 
-# 生成按钮
-st.markdown('<div class="button-container">', unsafe_allow_html=True)
-if st.button("一键生成", key="generate_btn", use_container_width=False):
-    if content_image and style_image:
-        # 模拟生成过程
-        with st.spinner("正在生成融合图片..."):
-            # 这里添加实际的风格融合代码
-            # 暂时使用占位图
-            st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
-            st.success("风格融合完成！")
-            st.rerun()
-    else:
-        st.warning("请先上传内容图片和风格图片")
+st.markdown('<div style="margin-top: 20px; display: flex; justify-content: center;">', unsafe_allow_html=True)
+if st.button("一键生成", key="generate_btn", use_container_width=True):
+        if content_image and style_image:
+            # 模拟生成过程
+            with st.spinner("正在生成融合图片..."):
+                # 这里添加实际的风格融合代码
+                # 暂时使用占位图
+                st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
+                st.success("风格融合完成！")
+                st.rerun()
+        else:
+            st.warning("请先上传内容图片和风格图片")
 st.markdown('</div>', unsafe_allow_html=True)
-
 # 底部信息
 st.markdown('''
 <div class="footer">
