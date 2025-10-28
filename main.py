@@ -78,7 +78,7 @@ st.markdown(
         left: 50%;                      /* 水平居中 */
         transform: translate(-50%, -50%); /* 精确居中定位 */
         width: 70%;                     /* 宽度与第2层级一致 */
-        height: 90%;                    /* 高度与第2层级一致 */
+        height: 100%;                    /* 高度与第2层级一致 */
         z-index: 3;                     /* 层级为3（最上层） */
         padding: 2%;                    /* 内边距 */
         display: flex;                  /* 弹性布局 */
