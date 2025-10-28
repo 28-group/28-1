@@ -81,7 +81,7 @@ st.markdown(
         height: 70%;                    /* 高度与第2层级一致 */
         z-index: 3;                     /* 层级为3（最上层） */
         padding: 2%;                    /* 内边距 */
-        display: flex;                  /* 弹性布局 */
+        /*display: flex;                  /* 弹性布局 */*/
         flex-direction: column;         /* 垂直方向排列 */
         background-color: transparent;  /* 完全透明背景 */
         pointer-events: auto;           /* 确保可以接收鼠标事件 */
