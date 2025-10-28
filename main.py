@@ -291,37 +291,51 @@ with col4:
 
 # 结果图片框
 # 结果图片框
+# 结果图片框 - 使用特殊容器
 with col5:
-    # 创建一个垂直容器来放置图片框和按钮
-    with st.container():
-        # 图片框
-        st.markdown('<div class="image-box">', unsafe_allow_html=True)
-        if 'result_image' in st.session_state and st.session_state.result_image:
-            st.image(st.session_state.result_image, caption="融合结果")
-        else:
-            st.markdown('''
-            <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 3vw; color: #4CAF50;"></div>
-                <div class="box-text">融合结果</div>
-            </div>
-            ''', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('<div class="result-container">', unsafe_allow_html=True)
+    
+    # 图片框部分
+    st.markdown('<div class="result-image-box">', unsafe_allow_html=True)
+    if 'result_image' in st.session_state and st.session_state.result_image:
+        # 使用columns确保图片居中
+        img_col1, img_col2, img_col3 = st.columns([1, 8, 1])
+        with img_col2:
+            st.image(st.session_state.result_image, use_container_width=True)
+    else:
+        st.markdown('''
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div style="font-size: 3vw; color: #4CAF50;"></div>
+            <div class="box-text">融合结果</div>
+        </div>
+        ''', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 按钮部分 - 使用固定布局
+    st.markdown('<div class="result-button-wrapper">', unsafe_allow_html=True)
+    
+    # 创建一个隐藏的form来包装按钮
+    with st.form(key="generate_form", clear_on_submit=False):
+        submitted = st.form_submit_button(
+            "一键生成", 
+            use_container_width=False,
+            type="primary"
+        )
         
-        # 在图片框下方添加一些垂直间距
-        st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
-        
-        # 使用固定宽度的按钮
-        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
-        with col_btn2:
-            if st.button("一键生成", key="generate_btn", use_container_width=True):
-                if content_image and style_image:
-                    with st.spinner("正在生成融合图片..."):
-                        # 这里添加实际的风格融合代码
-                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
-                        st.success("风格融合完成！")
-                        st.rerun()
-                else:
-                    st.warning("请先上传内容图片和风格图片")
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)  # 关闭result-container
+
+# 在col5外部处理按钮逻辑
+if submitted:
+    if content_image and style_image:
+        with st.spinner("正在生成融合图片..."):
+            # 这里添加实际的风格融合代码
+            st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
+            st.success("风格融合完成！")
+            st.rerun()
+    else:
+        st.warning("请先上传内容图片和风格图片")
 # 底部信息
 st.markdown('''
 <div class="footer">
