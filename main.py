@@ -1,18 +1,3 @@
-您说得对！之前的方案确实经常出现组件不固定的问题。让我分析一下当前设计的固定性：
-
-## 当前设计的固定性分析：
-
-### ✅ **真正固定的部分：**
-- 页面整体容器 (`stApp`) - 完全固定，禁止滚动
-- 灰色背景 - 固定全屏
-- 白色工作区 (`.main-workspace`) - 绝对定位居中固定
-
-### ⚠️ **可能不固定的风险点：**
-Streamlit组件本身有自带的布局行为，可能会破坏固定效果。
-
-## 更彻底的固定方案：
-
-```python
 import streamlit as st
 from PIL import Image
 import io
@@ -284,7 +269,3 @@ st.markdown('</div>', unsafe_allow_html=True)  # 关闭main-workspace
 # 初始化
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
-
-
-
-
