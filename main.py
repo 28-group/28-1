@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 仅修改文件上传组件样式，保留其他层级设置
+# 自定义CSS - 精准隐藏上传提示，压缩间距
 st.markdown(
     """
     <style>
-    /* 彻底禁止页面滑动 */
+    /* 基础样式保持不变 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,7 +37,6 @@ st.markdown(
         padding: 0 !important;
     }
     
-    /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -99,16 +98,17 @@ st.markdown(
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
-        line-height: 1.5;  /* 确保文字垂直居中 */
+        line-height: 1.5;
     }
     
+    /* 核心修改：压缩图片框间距并隐藏上传提示 */
     .image-container {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.5% !important;
-        padding: 0.2% !important;
+        gap: 0.2% !important;  /* 极窄间距 */
+        padding: 0 1% !important;  /* 减少左右内边距 */
         position: relative;
         z-index: 3;
     }
@@ -141,11 +141,42 @@ st.markdown(
     }
     
     .operator {
-        font-size: 3vw;
+        font-size: 2.5vw !important;  /* 缩小运算符 */
         color: #6b7280;
         font-weight: 400;
         margin: 0 !important;
         padding: 0 !important;
+    }
+    
+    /* 仅保留Browse按钮，隐藏上传提示和图标 */
+    [data-testid="stFileUploader"] > div > div:first-child {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+    
+    [data-testid="stFileUploader"] > div > button {
+        display: block !important;
+        visibility: visible !important;
+        background-color: #4CAF50 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 5px !important;
+        padding: 6px 12px !important;
+        font-size: 0.9vw !important;
+        cursor: pointer !important;
+        margin: 10px auto 0 !important;
+    }
+    
+    [data-testid="stFileUploader"] > div,
+    [data-testid="stFileUploader"] {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
     }
     
     .button-container {
@@ -177,7 +208,6 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部说明 - 保持不变 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -185,53 +215,8 @@ st.markdown(
         margin-top: 1%;
         padding-top: 1%;
         position: relative;
-        z-index: 4;  /* 提高层级确保可见 */
+        z-index: 4;
         border-top: 1px solid #f0f0f0;
-    }
-    
-    /* 核心修改：仅保留小上传按钮 */
-    /* 1. 隐藏上传提示容器（包含图标和文字） */
-    [data-testid="stFileUploader"] > div > div:first-child {
-        display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-    
-    /* 2. 仅显示Browse按钮并调整样式 */
-    [data-testid="stFileUploader"] > div > button {
-        display: block !important;
-        visibility: visible !important;
-        background-color: #4CAF50 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 5px !important;
-        padding: 6px 12px !important;
-        font-size: 0.9vw !important;
-        cursor: pointer !important;
-        margin: 10px auto 0 !important; /* 按钮居中，与上方文字保持距离 */
-        min-width: auto !important;
-        width: auto !important;
-    }
-    
-    /* 3. 去除按钮周围冗余样式 */
-    [data-testid="stFileUploader"] > div {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-    }
-    
-    [data-testid="stFileUploader"] {
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        height: auto !important;
     }
     
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -240,7 +225,7 @@ st.markdown(
     }
     
     img {
-        max-width: 30%;  /* 保持原图片显示比例 */
+        max-width: 30%;
         max-height: 30%;
         object-fit: contain;
     }
@@ -264,15 +249,13 @@ st.markdown('''
 # 图片框容器 - 保持不变
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局 - 保持不变
-col1, col2, col3, col4, col5 = st.columns([1, 0.04, 1, 0.04, 1])
+# 横向布局 - 压缩运算符列宽
+col1, col2, col3, col4, col5 = st.columns([1, 0.02, 1, 0.02, 1])
 
 # 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    # 显示"内容图片"提示文字
     st.markdown('<div class="box-text">内容图片</div>', unsafe_allow_html=True)
-    # 文件上传组件（仅显示Browse按钮）
     content_image = st.file_uploader(
         "内容图片",
         type=['png', 'jpg', 'jpeg'],
@@ -280,8 +263,7 @@ with col1:
         label_visibility="collapsed"
     )
     if content_image:
-        image = Image.open(content_image)
-        st.image(image)
+        st.image(Image.open(content_image))
     st.markdown('</div>', unsafe_allow_html=True)
 
 # 加号 - 保持不变
@@ -291,7 +273,6 @@ with col2:
 # 风格图片框
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    # 显示"风格图片"提示文字
     st.markdown('<div class="box-text">风格图片</div>', unsafe_allow_html=True)
     style_image = st.file_uploader(
         "风格图片",
@@ -300,8 +281,7 @@ with col3:
         label_visibility="collapsed"
     )
     if style_image:
-        image = Image.open(content_image)
-        st.image(image)
+        st.image(Image.open(style_image))
     st.markdown('</div>', unsafe_allow_html=True)
 
 # 等号 - 保持不变
