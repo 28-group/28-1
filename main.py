@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题，调整一键生成按钮样式
+# 自定义CSS - 修复标题和说明显示问题
 st.markdown(
     """
     <style>
@@ -158,9 +158,8 @@ st.markdown(
         z-index: 3;
     }
     
-    /* 一键生成按钮样式 - 颜色改为黄色，其他参数与绿色按钮一致 */
     .generate-button {
-        background-color: #fbbf24; /* 黄色 */
+        background-color: #3b82f6;
         color: white;
         border: none;
         border-radius: 8px;
@@ -174,7 +173,7 @@ st.markdown(
     }
     
     .generate-button:hover {
-        background-color: #d97706; /* 深黄色 hover 效果 */
+        background-color: #2563eb;
         transform: translateY(-2px);
     }
     
