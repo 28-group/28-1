@@ -273,7 +273,7 @@ def background_uploader():
     # 在右上角显示背景上传按钮
     col1, col2, col3 = st.columns([3, 1, 1])
     with col3:
-        if st.button("🎨 上传背景", key="bg_upload_btn", use_container_width=True):
+        if st.button("上传背景", key="bg_upload_btn", use_container_width=True):
             # 触发文件选择
             st.session_state.bg_upload_trigger = True
     
