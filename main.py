@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 进一步缩短宽度并调整布局
+# 自定义CSS - 保持原有样式，仅调整必要部分
 st.markdown(
     """
     <style>
-    /* 基础样式保持不变 */
+    /* 彻底禁止页面滑动 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,11 +37,12 @@ st.markdown(
         padding: 0 !important;
     }
     
+    /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 进一步缩短层级宽度 */
+    /* 层级样式 */
     .layer-0 {
         background-color: #808080;
         position: fixed;
@@ -60,7 +61,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 50%;  /* 从60%缩短到50% */
+        width: 70%;
         height: 70%;
         z-index: 2;
         padding: 2%;
@@ -73,7 +74,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 50%;  /* 从60%缩短到50% */
+        width: 70%;
         height: 70%;
         z-index: 3;
         padding: 2%;
@@ -83,7 +84,7 @@ st.markdown(
         pointer-events: auto;
     }
     
-    /* 标题区域保持不变 */
+    /* 标题区域 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -101,19 +102,17 @@ st.markdown(
         line-height: 1.5;
     }
     
-    /* 进一步减小间距 */
     .image-container {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.5%;  /* 从1%减小到0.5% */
-        padding: 0.5%;  /* 从1%减小到0.5% */
+        gap: 2%;
+        padding: 2%;
         position: relative;
         z-index: 3;
     }
     
-    /* 图片框样式保持不变 */
     .image-box {
         width: 35%;
         aspect-ratio: 2/3;
@@ -141,9 +140,8 @@ st.markdown(
         margin-top: 8px;
     }
     
-    /* 运算符进一步缩小 */
     .operator {
-        font-size: 2.5vw;  /* 从3vw缩小到2.5vw */
+        font-size: 4vw;
         color: #6b7280;
         font-weight: 400;
     }
@@ -177,7 +175,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部说明保持不变 */
+    /* 底部说明 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -189,7 +187,7 @@ st.markdown(
         border-top: 1px solid #f0f0f0;
     }
     
-    /* 组件可见性保持不变 */
+    /* 确保组件可见 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
         z-index: 3 !important;
@@ -240,7 +238,7 @@ st.markdown('<div class="image-container">', unsafe_allow_html=True)
 # 横向布局
 col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
-# 内容图片框（保持不变）
+# 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
@@ -261,11 +259,11 @@ with col1:
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号（保持不变）
+# 加号
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-# 风格图片框（保持不变）
+# 风格图片框
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
@@ -286,14 +284,14 @@ with col3:
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 等号（保持不变）
+# 等号
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框（调整按钮和文字位置）
+# 结果图片框 - 调整按钮和文字位置（按钮在上，文字在下）
 with col5:
     with st.container():
-        # 先显示按钮，再显示图片框，最后显示文字
+        # 先显示按钮
         col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
         with col_btn2:
             if st.button("一键生成", key="generate_btn", use_container_width=True):
@@ -305,9 +303,10 @@ with col5:
                 else:
                     st.warning("请先上传内容图片和风格图片")
         
+        # 按钮与图片框之间的间距
         st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
         
-        # 结果图片框
+        # 再显示图片框
         st.markdown('<div class="image-box">', unsafe_allow_html=True)
         if 'result_image' in st.session_state and st.session_state.result_image:
             st.image(st.session_state.result_image, caption="融合结果")
@@ -320,7 +319,7 @@ with col5:
             ''', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # 融合结果文字显示在图片框下方
+        # 最后显示"融合结果"文字（在图片框下方）
         st.markdown('''
         <div style="text-align: center; margin-top: 8px;">
             <div class="box-text">融合结果</div>
