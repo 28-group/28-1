@@ -115,7 +115,7 @@ st.markdown(
     
     /* 单个图片框样式 */
     .image-box {
-        width: 40%;                     /* 宽度为容器的40% */
+        width: 20%;                     /* 宽度为容器的40% */
         aspect-ratio: 2/3;              /* 宽高比2:3 */
         border: 2px dashed #4CAF50;     /* 绿色虚线边框 */
         border-radius: 10px;            /* 圆角 */
