@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 新增右上角按钮样式及层级覆盖逻辑
+# 自定义CSS - 修复按钮和覆盖图显示
 st.markdown(
     """
     <style>
@@ -195,16 +195,35 @@ st.markdown(
         z-index: 3 !important;
     }
     
-    .stFileUploader label {
+    /* 隐藏长条上传提示 */
+    .stFileUploader > div > div:first-child {
         display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
     }
     
-    .stFileUploader div {
+    .stFileUploader > div > button {
+        display: block !important;
+        visibility: visible !important;
+        background-color: #4CAF50 !important;
+        color: white !important;
         border: none !important;
-        background-color: transparent !important;
+        border-radius: 5px !important;
+        padding: 6px 12px !important;
+        font-size: 0.9vw !important;
+        cursor: pointer !important;
+        margin: 10px auto 0 !important;
+    }
+    
+    .stFileUploader > div,
+    .stFileUploader {
+        border: none !important;
+        background: transparent !important;
         padding: 0 !important;
-        width: 75%;
-        height: 75%;
+        margin: 0 !important;
+        width: 100% !important;
+        height: auto !important;
     }
     
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -283,9 +302,10 @@ overlay_upload = st.file_uploader(
 
 # 显示覆盖层图片
 if st.session_state.overlay_image:
+    image_bytes = st.session_state.overlay_image.read()
     st.markdown(
         f"""
-        <img src="{st.session_state.overlay_image.read()}" class="overlay-image" id="overlay-img">
+        <img src="data:image/jpeg;base64,{image_bytes}" class="overlay-image" id="overlay-img">
         """,
         unsafe_allow_html=True
     )
