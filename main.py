@@ -77,8 +77,8 @@ st.markdown(
         top: 50%;                       /* 垂直居中 */
         left: 50%;                      /* 水平居中 */
         transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 50%;                     /* 宽度与第2层级一致 */
-        height: 50%;                    /* 高度与第2层级一致 */
+        width: 70%;                     /* 宽度与第2层级一致 */
+        height: 70%;                    /* 高度与第2层级一致 */
         z-index: 3;                     /* 层级为3（最上层） */
         padding: 2%;                    /* 内边距 */
         display: flex;                  /* 弹性布局 */
@@ -115,7 +115,7 @@ st.markdown(
     
     /* 单个图片框样式 */
     .image-box {
-        width: 20%;                     /* 宽度为容器的40% */
+        width: 40%;                     /* 宽度为容器的40% */
         aspect-ratio: 2/3;              /* 宽高比2:3 */
         border: 2px dashed #4CAF50;     /* 绿色虚线边框 */
         border-radius: 10px;            /* 圆角 */
@@ -127,6 +127,7 @@ st.markdown(
         transition: all 0.3s ease;      /* 过渡动画效果 */
         padding: 1%;                   /* 内边距 */
         position: relative;             /* 相对定位 */
+        overflow: hidden;               /* 新增：隐藏溢出内容 */
     }
     
     /* 图片框悬停效果 */
@@ -204,8 +205,11 @@ st.markdown(
         border: none !important;        /* 无边框 */
         background-color: transparent !important;  /* 透明背景 */
         padding: 0 !important;          /* 无内边距 */
-        width: 75%;                    /* 宽度75% */
-        height: 75%;                   /* 高度75% */
+        width: 100% !important;         /* 修改：宽度100% */
+        height: 100% !important;        /* 修改：高度100% */
+        display: flex !important;       /* 新增：弹性布局 */
+        justify-content: center !important;  /* 新增：水平居中 */
+        align-items: center !important; /* 新增：垂直居中 */
     }
     
     /* 确保所有列和块都在第3层级 */
@@ -214,11 +218,46 @@ st.markdown(
         z-index: 3 !important;          /* 层级为3 */
     }
     
-    /* 图片通用样式 */
-    img {
-        max-width: 20%;                /* 最大宽度20% */
-        max-height: 25%;               /* 最大高度25% */
-        object-fit: contain;            /* 保持图片比例完整显示 */
+    /* 图片通用样式 - 修改为限制在图片框内 */
+    .image-box img {
+        max-width: 90% !important;      /* 修改：最大宽度90% */
+        max-height: 90% !important;     /* 修改：最大高度90% */
+        object-fit: contain !important; /* 保持图片比例完整显示 */
+        border-radius: 8px;             /* 新增：圆角 */
+    }
+    
+    /* 新增：文件上传器按钮样式 */
+    .stFileUploader button {
+        width: 100% !important;         /* 宽度100% */
+        height: 100% !important;        /* 高度100% */
+        border: none !important;        /* 无边框 */
+        background: transparent !important;  /* 透明背景 */
+    }
+    
+    /* 新增：文件上传器按钮内的文字样式 */
+    .stFileUploader button p {
+        font-size: 0.9vw !important;    /* 响应式字体大小 */
+        color: #2E7D32 !important;      /* 深绿色 */
+    }
+    
+    /* 新增：限制Streamlit图片组件在图片框内 */
+    .stImage {
+        max-width: 100% !important;     /* 最大宽度100% */
+        max-height: 100% !important;    /* 最大高度100% */
+        display: flex !important;       /* 弹性布局 */
+        justify-content: center !important;  /* 水平居中 */
+        align-items: center !important; /* 垂直居中 */
+    }
+    
+    /* 新增：图片框内部容器样式 */
+    .image-inner-container {
+        width: 100% !important;         /* 宽度100% */
+        height: 100% !important;        /* 高度100% */
+        display: flex !important;       /* 弹性布局 */
+        flex-direction: column !important;  /* 垂直排列 */
+        justify-content: center !important;  /* 垂直居中 */
+        align-items: center !important; /* 水平居中 */
+        overflow: hidden !important;    /* 隐藏溢出 */
     }
     </style>
     """,
@@ -248,27 +287,36 @@ st.markdown('<div class="image-container">', unsafe_allow_html=True)
 # 比例分配：内容图片框(1) | 加号(0.05) | 风格图片框(1) | 等号(0.05) | 结果图片框(1)
 col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
+# 辅助函数：创建图片显示容器
+def create_image_display(image, default_text):
+    """创建图片显示容器"""
+    if image:
+        # 如果已上传图片，打开并显示图片
+        pil_image = Image.open(image)
+        return st.image(pil_image, use_column_width=True)
+    else:
+        # 如果未上传图片，显示占位内容
+        return st.markdown(f'''
+        <div class="image-inner-container">
+            <div style="font-size: 3vw; color: #4CAF50;"></div>
+            <div class="box-text">{default_text}</div>
+        </div>
+        ''', unsafe_allow_html=True)
+
 # 内容图片框 - 第一个图片上传区域
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)  # 开始图片框
-    content_image = st.file_uploader(
-        "内容图片",                    # 上传器标签（被隐藏）
-        type=['png', 'jpg', 'jpeg'],   # 允许的文件类型
-        key="content",                 # 唯一标识符
-        label_visibility="collapsed"   # 隐藏标签显示
-    )
-    if content_image:
-        # 如果已上传图片，打开并显示图片
-        image = Image.open(content_image)
-        st.image(image)
-    else:
-        # 如果未上传图片，显示占位内容
-        st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
-            <div class="box-text">内容图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
+    
+    # 创建内部容器来限制内容
+    with st.container():
+        content_image = st.file_uploader(
+            "内容图片",                    # 上传器标签（被隐藏）
+            type=['png', 'jpg', 'jpeg'],   # 允许的文件类型
+            key="content",                 # 唯一标识符
+            label_visibility="collapsed"   # 隐藏标签显示
+        )
+        create_image_display(content_image, "内容图片")
+    
     st.markdown('</div>', unsafe_allow_html=True)  # 结束图片框
 
 # 加号运算符 - 第一个运算符
@@ -278,24 +326,17 @@ with col2:
 # 风格图片框 - 第二个图片上传区域
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)  # 开始图片框
-    style_image = st.file_uploader(
-        "风格图片",                    # 上传器标签（被隐藏）
-        type=['png', 'jpg', 'jpeg'],   # 允许的文件类型
-        key="style",                   # 唯一标识符
-        label_visibility="collapsed"   # 隐藏标签显示
-    )
-    if style_image:
-        # 如果已上传图片，打开并显示图片
-        image = Image.open(style_image)
-        st.image(image)
-    else:
-        # 如果未上传图片，显示占位内容
-        st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
-            <div class="box-text">风格图片</div>
-        </div>
-        ''', unsafe_allow_html=True)
+    
+    # 创建内部容器来限制内容
+    with st.container():
+        style_image = st.file_uploader(
+            "风格图片",                    # 上传器标签（被隐藏）
+            type=['png', 'jpg', 'jpeg'],   # 允许的文件类型
+            key="style",                   # 唯一标识符
+            label_visibility="collapsed"   # 隐藏标签显示
+        )
+        create_image_display(style_image, "风格图片")
+    
     st.markdown('</div>', unsafe_allow_html=True)  # 结束图片框
 
 # 等号运算符 - 第二个运算符
@@ -308,17 +349,21 @@ with col5:
     with st.container():
         # 结果图片框
         st.markdown('<div class="image-box">', unsafe_allow_html=True)  # 开始图片框
-        if 'result_image' in st.session_state and st.session_state.result_image:
-            # 如果已生成结果图片，显示图片
-            st.image(st.session_state.result_image, caption="融合结果")
-        else:
-            # 如果未生成结果，显示占位内容
-            st.markdown('''
-            <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 3vw; color: #4CAF50;"></div>
-                <div class="box-text">融合结果</div>
-            </div>
-            ''', unsafe_allow_html=True)
+        
+        # 创建内部容器来限制内容
+        with st.container():
+            if 'result_image' in st.session_state and st.session_state.result_image:
+                # 如果已生成结果图片，显示图片
+                st.image(st.session_state.result_image, use_column_width=True)
+            else:
+                # 如果未生成结果，显示占位内容
+                st.markdown('''
+                <div class="image-inner-container">
+                    <div style="font-size: 3vw; color: #4CAF50;"></div>
+                    <div class="box-text">融合结果</div>
+                </div>
+                ''', unsafe_allow_html=True)
+        
         st.markdown('</div>', unsafe_allow_html=True)  # 结束图片框
         
         # 在图片框下方添加一些垂直间距
