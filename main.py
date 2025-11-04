@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 缩短透明层级宽度以减小框间距
+# 自定义CSS - 进一步缩短宽度并调整布局
 st.markdown(
     """
     <style>
-    /* 彻底禁止页面滑动 */
+    /* 基础样式保持不变 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,12 +37,11 @@ st.markdown(
         padding: 0 !important;
     }
     
-    /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 层级样式 - 缩短透明层级宽度 */
+    /* 进一步缩短层级宽度 */
     .layer-0 {
         background-color: #808080;
         position: fixed;
@@ -61,7 +60,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 60%;  /* 缩短白色层级宽度 */
+        width: 50%;  /* 从60%缩短到50% */
         height: 70%;
         z-index: 2;
         padding: 2%;
@@ -74,7 +73,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 60%;  /* 缩短透明层级宽度，与白色层级一致 */
+        width: 50%;  /* 从60%缩短到50% */
         height: 70%;
         z-index: 3;
         padding: 2%;
@@ -84,7 +83,7 @@ st.markdown(
         pointer-events: auto;
     }
     
-    /* 标题区域 */
+    /* 标题区域保持不变 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -102,18 +101,19 @@ st.markdown(
         line-height: 1.5;
     }
     
-    /* 调整图片容器间距 */
+    /* 进一步减小间距 */
     .image-container {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1%;  /* 减小框之间的间距 */
-        padding: 1%;  /* 减小内边距 */
+        gap: 0.5%;  /* 从1%减小到0.5% */
+        padding: 0.5%;  /* 从1%减小到0.5% */
         position: relative;
         z-index: 3;
     }
     
+    /* 图片框样式保持不变 */
     .image-box {
         width: 35%;
         aspect-ratio: 2/3;
@@ -141,8 +141,9 @@ st.markdown(
         margin-top: 8px;
     }
     
+    /* 运算符进一步缩小 */
     .operator {
-        font-size: 3vw;  /* 适当缩小运算符大小 */
+        font-size: 2.5vw;  /* 从3vw缩小到2.5vw */
         color: #6b7280;
         font-weight: 400;
     }
@@ -176,7 +177,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部说明 */
+    /* 底部说明保持不变 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -188,7 +189,7 @@ st.markdown(
         border-top: 1px solid #f0f0f0;
     }
     
-    /* 确保组件可见 */
+    /* 组件可见性保持不变 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
         z-index: 3 !important;
@@ -236,10 +237,10 @@ st.markdown('''
 # 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局（保持原有结构）
+# 横向布局
 col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
-# 内容图片框
+# 内容图片框（保持不变）
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
@@ -260,11 +261,11 @@ with col1:
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号
+# 加号（保持不变）
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-# 风格图片框
+# 风格图片框（保持不变）
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
@@ -285,13 +286,28 @@ with col3:
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 等号
+# 等号（保持不变）
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框
+# 结果图片框（调整按钮和文字位置）
 with col5:
     with st.container():
+        # 先显示按钮，再显示图片框，最后显示文字
+        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+        with col_btn2:
+            if st.button("一键生成", key="generate_btn", use_container_width=True):
+                if content_image and style_image:
+                    with st.spinner("正在生成融合图片..."):
+                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
+                        st.success("风格融合完成！")
+                        st.rerun()
+                else:
+                    st.warning("请先上传内容图片和风格图片")
+        
+        st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
+        
+        # 结果图片框
         st.markdown('<div class="image-box">', unsafe_allow_html=True)
         if 'result_image' in st.session_state and st.session_state.result_image:
             st.image(st.session_state.result_image, caption="融合结果")
@@ -304,18 +320,12 @@ with col5:
             ''', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
-        
-        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
-        with col_btn2:
-            if st.button("一键生成", key="generate_btn", use_container_width=True):
-                if content_image and style_image:
-                    with st.spinner("正在生成融合图片..."):
-                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
-                        st.success("风格融合完成！")
-                        st.rerun()
-                else:
-                    st.warning("请先上传内容图片和风格图片")
+        # 融合结果文字显示在图片框下方
+        st.markdown('''
+        <div style="text-align: center; margin-top: 8px;">
+            <div class="box-text">融合结果</div>
+        </div>
+        ''', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭image-container
 
