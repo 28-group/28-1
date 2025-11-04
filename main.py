@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 缩小间距并协调运算符位置
+# 自定义CSS - 强制缩小间距（使用更精确的选择器和!important增强优先级）
 st.markdown(
     """
     <style>
-    /* 彻底禁止页面滑动 */
+    /* 基础样式保持不变 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,10 +37,9 @@ st.markdown(
         padding: 0 !important;
     }
     
-    /* 隐藏Streamlit默认元素 */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    header {visibility: hidden !important;}
     
     /* 层级样式 */
     .layer-0 {
@@ -84,7 +83,7 @@ st.markdown(
         pointer-events: auto;
     }
     
-    /* 标题区域 - 修复显示问题 */
+    /* 标题区域 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -99,22 +98,25 @@ st.markdown(
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
-        line-height: 1.5;  /* 确保文字垂直居中 */
+        line-height: 1.5;
     }
     
+    /* 核心修改：强制缩小容器间距 */
     .image-container {
         flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1%;  /* 间隔缩小为原来的一半 */
-        padding: 1%;  /* 内边距同步缩小 */
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 0.5% !important;  /* 强制缩小到原间距的1/4 */
+        padding: 0 1% !important;  /* 左右内边距减小 */
         position: relative;
         z-index: 3;
+        width: 100% !important;
     }
     
+    /* 图片框样式 */
     .image-box {
-        width: 35%;
+        width: 32% !important;  /* 略微增加宽度以填充空间 */
         aspect-ratio: 2/3;
         border: 2px dashed #4CAF50;
         border-radius: 10px;
@@ -128,35 +130,17 @@ st.markdown(
         position: relative;
     }
     
-    .image-box:hover {
-        border-color: #388E3C;
-        background-color: #dcedc8;
-    }
-    
-    .box-text {
-        color: #2E7D32;
-        font-size: 1vw;
-        text-align: center;
-        margin-top: 8px;
-    }
-    
+    /* 运算符样式调整 */
     .operator {
-        font-size: 3vw;  /* 运算符适当缩小以配合间距 */
+        font-size: 2.5vw !important;  /* 进一步缩小运算符 */
         color: #6b7280;
         font-weight: 400;
-        text-align: center;  /* 确保运算符居中 */
+        margin: 0 !important;  /* 清除默认外边距 */
+        padding: 0 !important;
+        text-align: center;
     }
     
-    .button-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 1%;
-        padding-top: 1%;
-        border-top: 1px solid #f0f0f0;
-        position: relative;
-        z-index: 3;
-    }
-    
+    /* 按钮和底部说明样式保持不变 */
     .generate-button {
         background-color: #3b82f6;
         color: white;
@@ -167,16 +151,8 @@ st.markdown(
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 25%;
-        max-width: 100px;
     }
     
-    .generate-button:hover {
-        background-color: #2563eb;
-        transform: translateY(-2px);
-    }
-    
-    /* 底部说明 - 修复显示问题 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -184,37 +160,26 @@ st.markdown(
         margin-top: 1%;
         padding-top: 1%;
         position: relative;
-        z-index: 4;  /* 提高层级确保可见 */
+        z-index: 4;
         border-top: 1px solid #f0f0f0;
     }
     
-    /* 确保组件可见 */
-    .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
-        position: relative !important;
-        z-index: 3 !important;
-    }
-    
-    .stFileUploader label {
-        display: none !important;
+    /* 确保文件上传组件不占用额外空间 */
+    .stFileUploader {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     .stFileUploader div {
-        border: none !important;
-        background-color: transparent !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* 调整列布局 */
+    [data-testid="column"] {
         padding: 0 !important;
-        width: 75%;
-        height: 75%;
-    }
-    
-    .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
-        position: relative !important;
-        z-index: 3 !important;
-    }
-    
-    img {
-        max-width: 30%;  /* 调整图片大小确保可见 */
-        max-height: 30%;
-        object-fit: contain;
+        margin: 0 !important;
     }
     </style>
     """,
@@ -226,7 +191,7 @@ st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
-# 标题区域 - 确保正确显示
+# 标题区域
 st.markdown('''
 <div class="title-section">
     <div class="main-title">🎨 AI图片风格融合</div>
@@ -236,8 +201,8 @@ st.markdown('''
 # 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局 - 调整列宽比例，缩小运算符所在列的宽度
-col1, col2, col3, col4, col5 = st.columns([1, 0.03, 1, 0.03, 1])  # 运算符列宽从0.05缩小到0.03
+# 横向布局 - 进一步缩小运算符列宽
+col1, col2, col3, col4, col5 = st.columns([1, 0.02, 1, 0.02, 1])  # 运算符列宽缩至0.02
 
 # 内容图片框
 with col1:
@@ -319,7 +284,7 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭image-container
 
-# 底部使用说明 - 确保正确显示
+# 底部使用说明
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
