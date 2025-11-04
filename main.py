@@ -215,8 +215,8 @@ st.markdown(
     
     /* 关键修改：确保图片在图片框内部显示 */
     .image-box img {
-        max-width: 90% !important;      /* 限制最大宽度 */
-        max-height: 90% !important;     /* 限制最大高度 */
+        max-width: 30% !important;      /* 限制最大宽度 */
+        max-height: 30% !important;     /* 限制最大高度 */
         object-fit: contain !important; /* 保持比例完整显示 */
         border-radius: 8px !important;  /* 圆角 */
         position: relative !important;
