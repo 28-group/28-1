@@ -185,7 +185,7 @@ st.markdown(
         text-align: center;              /* 文字居中 */
         color: #6b7280;                 /* 灰色文字 */
         font-size: 0.8vw;               /* 响应式小字体 */
-        margin-top: 10%;                 /* 顶部外边距 */
+        margin-top: 2%;                 /* 顶部外边距 */
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
