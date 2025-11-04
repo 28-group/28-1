@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题
+# 自定义CSS - 修复标题和说明显示问题，并隐藏拖放区域
 st.markdown(
     """
     <style>
@@ -216,6 +216,42 @@ st.markdown(
         max-width: 30%;  /* 调整图片大小确保可见 */
         max-height: 30%;
         object-fit: contain;
+    }
+    
+    /* 隐藏拖放区域，只保留Browse files按钮 */
+    /* 隐藏整个拖放区域容器 */
+    .stFileUploader > div:first-child {
+        display: none !important;
+    }
+    
+    /* 确保按钮容器显示 */
+    .stFileUploader > div:last-child {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    /* 调整按钮样式 */
+    .stFileUploader button {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        background: transparent !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    
+    /* 按钮文字样式 */
+    .stFileUploader button p {
+        font-size: 1vw !important;
+        color: #2E7D32 !important;
+        margin: 0 !important;
+    }
+    
+    /* 当有图片上传时，隐藏按钮 */
+    .stFileUploader[data-testid="stFileUploader"] div[data-testid="stFileUploaderFileName"] ~ div:last-child {
+        display: none !important;
     }
     </style>
     """,
