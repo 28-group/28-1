@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题
+# 自定义CSS - 缩短透明层级宽度以减小框间距
 st.markdown(
     """
     <style>
@@ -42,7 +42,7 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 层级样式 */
+    /* 层级样式 - 缩短透明层级宽度 */
     .layer-0 {
         background-color: #808080;
         position: fixed;
@@ -61,7 +61,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 70%;
+        width: 60%;  /* 缩短白色层级宽度 */
         height: 70%;
         z-index: 2;
         padding: 2%;
@@ -74,7 +74,7 @@ st.markdown(
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 70%;
+        width: 60%;  /* 缩短透明层级宽度，与白色层级一致 */
         height: 70%;
         z-index: 3;
         padding: 2%;
@@ -84,7 +84,7 @@ st.markdown(
         pointer-events: auto;
     }
     
-    /* 标题区域 - 修复显示问题 */
+    /* 标题区域 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -99,16 +99,17 @@ st.markdown(
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
-        line-height: 1.5;  /* 确保文字垂直居中 */
+        line-height: 1.5;
     }
     
+    /* 调整图片容器间距 */
     .image-container {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2%;
-        padding: 2%;
+        gap: 1%;  /* 减小框之间的间距 */
+        padding: 1%;  /* 减小内边距 */
         position: relative;
         z-index: 3;
     }
@@ -141,7 +142,7 @@ st.markdown(
     }
     
     .operator {
-        font-size: 4vw;
+        font-size: 3vw;  /* 适当缩小运算符大小 */
         color: #6b7280;
         font-weight: 400;
     }
@@ -175,7 +176,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部说明 - 修复显示问题 */
+    /* 底部说明 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -183,7 +184,7 @@ st.markdown(
         margin-top: 1%;
         padding-top: 1%;
         position: relative;
-        z-index: 4;  /* 提高层级确保可见 */
+        z-index: 4;
         border-top: 1px solid #f0f0f0;
     }
     
@@ -211,7 +212,7 @@ st.markdown(
     }
     
     img {
-        max-width: 100%;  /* 调整图片大小确保可见 */
+        max-width: 100%;
         max-height: 80%;
         object-fit: contain;
     }
@@ -225,7 +226,7 @@ st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
-# 标题区域 - 确保正确显示
+# 标题区域
 st.markdown('''
 <div class="title-section">
     <div class="main-title">🎨 AI图片风格融合工具</div>
@@ -235,7 +236,7 @@ st.markdown('''
 # 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局
+# 横向布局（保持原有结构）
 col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
 # 内容图片框
@@ -318,7 +319,7 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭image-container
 
-# 底部使用说明 - 确保正确显示
+# 底部使用说明
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
