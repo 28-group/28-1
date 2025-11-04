@@ -211,7 +211,7 @@ st.markdown(
     }
     
     img {
-        max-width: 20%;  /* 调整图片大小确保可见 */
+        max-width: 25%;  /* 调整图片大小确保可见 */
         max-height: 25%;
         object-fit: contain;
     }
