@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 精准隐藏上传提示，压缩间距
+# 自定义CSS - 修复标题和说明显示问题
 st.markdown(
     """
     <style>
-    /* 基础样式保持不变 */
+    /* 彻底禁止页面滑动 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,11 +37,12 @@ st.markdown(
         padding: 0 !important;
     }
     
+    /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* 层级样式 - 保持不变 */
+    /* 层级样式 */
     .layer-0 {
         background-color: #808080;
         position: fixed;
@@ -83,7 +84,7 @@ st.markdown(
         pointer-events: auto;
     }
     
-    /* 标题区域 - 保持不变 */
+    /* 标题区域 - 修复显示问题 */
     .title-section {
         text-align: center;
         margin-bottom: 2%;
@@ -98,17 +99,16 @@ st.markdown(
         font-weight: bold;
         color: #ff69b4;
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.5;  /* 确保文字垂直居中 */
     }
     
-    /* 核心修改：压缩图片框间距并隐藏上传提示 */
     .image-container {
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.1% !important;  /* 极窄间距 */
-        padding: 0 0.5% !important;  /* 减少左右内边距 */
+        gap: 0.5% !important;
+        padding: 0.2% !important;
         position: relative;
         z-index: 3;
     }
@@ -141,42 +141,11 @@ st.markdown(
     }
     
     .operator {
-        font-size: 2vw !important;  /* 进一步缩小运算符 */
+        font-size: 3vw;
         color: #6b7280;
         font-weight: 400;
         margin: 0 !important;
         padding: 0 !important;
-    }
-    
-    /* 仅保留Browse按钮，隐藏上传提示和图标 */
-    [data-testid="stFileUploader"] > div > div:first-child {
-        display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
-    
-    [data-testid="stFileUploader"] > div > button {
-        display: block !important;
-        visibility: visible !important;
-        background-color: #4CAF50 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 5px !important;
-        padding: 6px 12px !important;
-        font-size: 0.9vw !important;
-        cursor: pointer !important;
-        margin: 10px auto 0 !important;
-    }
-    
-    [data-testid="stFileUploader"] > div,
-    [data-testid="stFileUploader"] {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        height: auto !important;
     }
     
     .button-container {
@@ -208,6 +177,7 @@ st.markdown(
         transform: translateY(-2px);
     }
     
+    /* 底部说明 - 修复显示问题 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -215,8 +185,26 @@ st.markdown(
         margin-top: 1%;
         padding-top: 1%;
         position: relative;
-        z-index: 4;
+        z-index: 4;  /* 提高层级确保可见 */
         border-top: 1px solid #f0f0f0;
+    }
+    
+    /* 确保组件可见 */
+    .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
+        position: relative !important;
+        z-index: 3 !important;
+    }
+    
+    .stFileUploader label {
+        display: none !important;
+    }
+    
+    .stFileUploader div {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+        width: 75%;
+        height: 75%;
     }
     
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -225,7 +213,7 @@ st.markdown(
     }
     
     img {
-        max-width: 30%;
+        max-width: 30%;  /* 调整图片大小确保可见 */
         max-height: 30%;
         object-fit: contain;
     }
@@ -234,46 +222,52 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# 层级结构 - 保持不变
+# 层级结构
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
-# 标题区域 - 保持不变
+# 标题区域 - 确保正确显示
 st.markdown('''
 <div class="title-section">
     <div class="main-title">🎨 AI图片风格融合</div>
 </div>
 ''', unsafe_allow_html=True)
 
-# 图片框容器 - 保持不变
+# 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局 - 压缩运算符列宽
-col1, col2, col3, col4, col5 = st.columns([1, 0.01, 1, 0.01, 1])
+# 横向布局
+col1, col2, col3, col4, col5 = st.columns([1, 0.04, 1, 0.04, 1])
 
 # 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    st.markdown('<div class="box-text">内容图片</div>', unsafe_allow_html=True)
-    content_image = st.file_uploader(
-        "内容图片",
+    content_file = st.file_uploader(
+        "",  # 移除标签
         type=['png', 'jpg', 'jpeg'],
         key="content",
-        label_visibility="collapsed"
+        label_visibility="hidden"  # 隐藏标签
     )
-    if content_image:
-        st.image(Image.open(content_image))
+    if content_file:
+        image = Image.open(content_file)
+        st.image(image, use_column_width=True)
+    else:
+        # 只保留小按钮，去掉大按钮
+        st.markdown('''
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
+            <button class="upload-button">Browse files</button>
+        </div>
+        ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 加号 - 保持不变
+# 加号
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
 # 风格图片框
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    st.markdown('<div class="box-text">风格图片</div>', unsafe_allow_html=True)
     style_image = st.file_uploader(
         "风格图片",
         type=['png', 'jpg', 'jpeg'],
@@ -281,21 +275,34 @@ with col3:
         label_visibility="collapsed"
     )
     if style_image:
-        st.image(Image.open(style_image))
+        image = Image.open(style_image)
+        st.image(image)
+    else:
+        st.markdown('''
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;"></div>
+            <div class="box-text">风格图片</div>
+        </div>
+        ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-# 等号 - 保持不变
+# 等号
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框 - 保持不变
+# 结果图片框
 with col5:
     with st.container():
         st.markdown('<div class="image-box">', unsafe_allow_html=True)
         if 'result_image' in st.session_state and st.session_state.result_image:
             st.image(st.session_state.result_image, caption="融合结果")
         else:
-            st.markdown('<div class="box-text">融合结果</div>', unsafe_allow_html=True)
+            st.markdown('''
+            <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+                <div style="font-size: 3vw; color: #4CAF50;"></div>
+                <div class="box-text">融合结果</div>
+            </div>
+            ''', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
@@ -303,7 +310,7 @@ with col5:
         col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
         with col_btn2:
             if st.button("一键生成", key="generate_btn", use_container_width=True):
-                if content_image and style_image:
+                if content_file and style_image:
                     with st.spinner("正在生成融合图片..."):
                         st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
                         st.success("风格融合完成！")
@@ -313,7 +320,7 @@ with col5:
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭image-container
 
-# 底部使用说明 - 保持不变
+# 底部使用说明 - 确保正确显示
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
@@ -322,6 +329,6 @@ st.markdown('''
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2
 
-# 初始化session state - 保持不变
+# 初始化session state
 if 'result_image' not in st.session_state:
     st.session_state.result_image = None
