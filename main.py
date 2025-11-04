@@ -107,8 +107,8 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1%;
-        padding: 1%;
+        gap: 0.5% !important;
+        padding: 0.2% !important;
         position: relative;
         z-index: 3;
     }
@@ -141,9 +141,11 @@ st.markdown(
     }
     
     .operator {
-        font-size: 4vw;
+        font-size: 3vw;
         color: #6b7280;
         font-weight: 400;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
     .button-container {
@@ -236,7 +238,7 @@ st.markdown('''
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 横向布局
-col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
+col1, col2, col3, col4, col5 = st.columns([1, 0.03, 1, 0.03, 1])
 
 # 内容图片框
 with col1:
