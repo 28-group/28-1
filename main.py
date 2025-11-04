@@ -171,7 +171,7 @@ st.markdown(
         cursor: pointer;                /* 手型光标 */
         transition: all 0.3s ease;      /* 过渡动画效果 */
         width: 25%;                     /* 宽度为容器的25% */
-        max-width: 180px;               /* 最大宽度限制 */
+        max-width: 100px;               /* 最大宽度限制 */
     }
     
     /* 生成按钮悬停效果 */
