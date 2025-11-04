@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题
+# 自定义CSS - 新增右上角按钮样式及层级覆盖逻辑
 st.markdown(
     """
     <style>
@@ -217,15 +217,80 @@ st.markdown(
         max-height: 30%;
         object-fit: contain;
     }
+
+    /* 右上角按钮样式 */
+    .top-right-button {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 4 !important;  /* 确保覆盖layer-1 */
+        background-color: #4CAF50 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 5px !important;
+        padding: 8px 16px !important;
+        font-size: 1vw !important;
+        cursor: pointer !important;
+    }
+
+    .top-right-button:hover {
+        background-color: #388E3C !important;
+    }
+
+    /* 覆盖层样式 */
+    .overlay-image {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 2.5 !important;  /* 介于layer-1和layer-2之间 */
+        object-fit: cover !important;
+        opacity: 0.8 !important;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
+# 初始化覆盖层图片状态
+if 'overlay_image' not in st.session_state:
+    st.session_state.overlay_image = None
+
 # 层级结构
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
+
+# 右上角上传按钮
+st.markdown(
+    f"""
+    <button class="top-right-button" onclick="document.getElementById('overlay-upload').click()">
+        上传覆盖图
+    </button>
+    """,
+    unsafe_allow_html=True
+)
+
+# 隐藏的文件上传组件（用于右上角按钮触发）
+overlay_upload = st.file_uploader(
+    "上传覆盖图",
+    type=['png', 'jpg', 'jpeg'],
+    key="overlay",
+    label_visibility="hidden",
+    on_change=lambda: st.session_state.update({"overlay_image": overlay_upload})
+)
+
+# 显示覆盖层图片
+if st.session_state.overlay_image:
+    st.markdown(
+        f"""
+        <img src="{st.session_state.overlay_image.read()}" class="overlay-image" id="overlay-img">
+        """,
+        unsafe_allow_html=True
+    )
+    # 重置文件读取指针
+    st.session_state.overlay_image.seek(0)
 
 # 标题区域 - 确保正确显示
 st.markdown('''
