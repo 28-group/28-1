@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"    # 初始状态下侧边栏为折叠状态
 )
 
-# 自定义CSS - 明确四个层级
+# 自定义CSS - 明确三个层级
 st.markdown(
     """
     <style>
@@ -71,7 +71,7 @@ st.markdown(
         flex-direction: column;         /* 垂直方向排列 */
     }
     
-    /* 第3层级：透明组件容器 - 用于放置交互组件 */
+    /* 第3层级：透明组件容器 - 最上层，用于放置交互组件 */
     .layer-2 {
         position: fixed;                 /* 固定定位 */
         top: 50%;                       /* 垂直居中 */
@@ -79,7 +79,7 @@ st.markdown(
         transform: translate(-50%, -50%); /* 精确居中定位 */
         width: 70%;                     /* 宽度与第2层级一致 */
         height: 70%;                    /* 高度与第2层级一致 */
-        z-index: 3;                     /* 层级为3 */
+        z-index: 3;                     /* 层级为3（最上层） */
         padding: 2%;                    /* 内边距 */
         display: flex;                  /* 弹性布局 */
         flex-direction: column;         /* 垂直方向排列 */
@@ -87,29 +87,12 @@ st.markdown(
         pointer-events: auto;           /* 确保可以接收鼠标事件 */
     }
     
-    /* 第4层级：标题和说明容器 - 最上层 */
-    .layer-3 {
-        position: fixed;                 /* 固定定位 */
-        top: 50%;                       /* 垂直居中 */
-        left: 50%;                      /* 水平居中 */
-        transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 70%;                     /* 宽度与第2层级一致 */
-        height: 70%;                    /* 高度与第2层级一致 */
-        z-index: 4;                     /* 层级为4（最上层） */
-        padding: 2%;                    /* 内边距 */
-        display: flex;                  /* 弹性布局 */
-        flex-direction: column;         /* 垂直方向排列 */
-        background-color: transparent;  /* 完全透明背景 */
-        pointer-events: none;           /* 不接收鼠标事件，穿透到下层 */
-    }
-    
-    /* 标题区域样式 - 位于第4层级 */
+    /* 标题区域样式 - 位于第3层级 */
     .title-section {
         text-align: center;              /* 文字居中 */
         margin-bottom: 2%;              /* 底部外边距 */
         padding-bottom: 1%;             /* 底部内边距 */
         border-bottom: 1px solid #f0f0f0; /* 底部边框线 */
-        pointer-events: none;           /* 不接收鼠标事件 */
     }
     
     /* 主标题样式 */
@@ -118,7 +101,6 @@ st.markdown(
         font-weight: bold;              /* 粗体 */
         color: #ff69b4;                 /* 粉红色 */
         margin: 0;                      /* 清除外边距 */
-        pointer-events: none;           /* 不接收鼠标事件 */
     }
     
     /* 图片框容器样式 - 位于第3层级 */
@@ -133,7 +115,7 @@ st.markdown(
     
     /* 单个图片框样式 */
     .image-box {
-        width: 35%;                     /* 宽度为容器的40% */
+        width: 40%;                     /* 宽度为容器的40% */
         aspect-ratio: 2/3;              /* 宽高比2:3 */
         border: 2px dashed #4CAF50;     /* 绿色虚线边框 */
         border-radius: 10px;            /* 圆角 */
@@ -198,13 +180,12 @@ st.markdown(
         transform: translateY(-2px);    /* 悬停时向上移动2像素 */
     }
     
-    /* 底部信息样式 - 位于第4层级 */
+    /* 底部信息样式 */
     .footer {
         text-align: center;              /* 文字居中 */
         color: #6b7280;                 /* 灰色文字 */
         font-size: 0.8vw;               /* 响应式小字体 */
         margin-top: 2%;                 /* 顶部外边距 */
-        pointer-events: none;           /* 不接收鼠标事件 */
     }
     
     /* 强制所有Streamlit组件在第3层级显示 */
@@ -239,16 +220,6 @@ st.markdown(
         max-height: 25%;               /* 最大高度25% */
         object-fit: contain;            /* 保持图片比例完整显示 */
     }
-    
-    /* 第4层级内容容器 */
-    .layer-3-content {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        pointer-events: none;           /* 不接收鼠标事件 */
-    }
     </style>
     """,
     unsafe_allow_html=True  # 允许使用HTML，注意安全风险
@@ -260,8 +231,15 @@ st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 # 第2层级：白色工作区 - 创建中间层的白色面板
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 
-# 第3层级：透明组件容器 - 创建交互组件容器
+# 第3层级：透明组件容器 - 创建最上层的透明容器，所有交互组件放在这里
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
+
+# 标题区域 - 显示应用主标题
+st.markdown('''
+<div class="title-section">
+    <div class="main-title">🎨 AI图片风格融合工具</div>
+</div>
+''', unsafe_allow_html=True)
 
 # 图片框容器 - 包含三个图片框和运算符
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
@@ -363,34 +341,15 @@ with col5:
                     # 如果未上传图片，显示警告消息
                     st.warning("请先上传内容图片和风格图片")
 
-# 关闭第3层级 - 结束交互组件容器
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
-
-# 第4层级：标题和说明容器 - 最上层
-st.markdown('<div class="layer-3">', unsafe_allow_html=True)
-
-# 第4层级内容容器
-st.markdown('<div class="layer-3-content">', unsafe_allow_html=True)
-
-# 标题区域 - 显示应用主标题（位于第4层级）
-st.markdown('''
-<div class="title-section">
-    <div class="main-title">🎨 AI图片风格融合工具</div>
-</div>
-''', unsafe_allow_html=True)
-
-# 底部信息 - 显示使用说明（位于第4层级）
+# 底部信息 - 显示使用说明
 st.markdown('''
 <div class="footer">
     使用说明：上传内容图片和风格图片，点击生成按钮即可获得风格融合后的图片
 </div>
 ''', unsafe_allow_html=True)
 
-# 关闭第4层级内容容器
-st.markdown('</div>', unsafe_allow_html=True)
-
-# 关闭第4层级 - 结束标题和说明容器
-st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-3（第4层级）
+# 关闭第3层级 - 结束透明组件容器
+st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2（第3层级）
 
 # 初始化session state - 用于存储应用状态
 if 'result_image' not in st.session_state:
