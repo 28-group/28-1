@@ -251,8 +251,8 @@ st.markdown(
     
     /* 新增：图片框内部容器样式 */
     .image-inner-container {
-        width: 100% !important;         /* 宽度100% */
-        height: 100% !important;        /* 高度100% */
+        width: 25% !important;         /* 宽度25% */
+        height: 25% !important;        /* 高度25% */
         display: flex !important;       /* 弹性布局 */
         flex-direction: column !important;  /* 垂直排列 */
         justify-content: center !important;  /* 垂直居中 */
