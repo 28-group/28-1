@@ -67,16 +67,6 @@ st.markdown(
         box-shadow: 0 6px 16px rgba(0,0,0,0.3) !important;
     }
     
-    /* 隐藏背景上传的文件上传器 */
-    [data-testid="stFileUploader"][key="bg_upload_trigger"] {
-        display: none !important;
-    }
-    
-    /* 隐藏清除背景按钮 */
-    [data-testid="baseButton-secondary"][key="clear_bg"] {
-        display: none !important;
-    }
-    
     /* 层级样式 */
     .layer-0 {
         background-color: #808080;
@@ -266,35 +256,35 @@ if 'result_image' not in st.session_state:
 if 'background_image' not in st.session_state:
     st.session_state.background_image = None
 
-# 背景图片上传功能 - 简化版本
+# 背景图片上传功能 - 使用隐藏的文件上传器
 def background_uploader():
     """背景图片上传组件"""
     
-    # 在右上角显示背景上传按钮
+    # 使用列布局放置按钮
     col1, col2, col3 = st.columns([3, 1, 1])
-    with col3:
-        if st.button("上传背景", key="bg_upload_btn", use_container_width=True):
-            # 触发文件选择
-            st.session_state.bg_upload_trigger = True
     
-    # 如果点击了上传按钮，显示文件选择器
-    if st.session_state.get('bg_upload_trigger', False):
-        bg_image = st.file_uploader(
-            "上传背景图片",
-            type=['png', 'jpg', 'jpeg'],
-            key="bg_upload_trigger",
-            label_visibility="collapsed"
-        )
-        
-        if bg_image is not None:
-            # 将背景图片转换为base64并存储在session state中
-            image = Image.open(bg_image)
-            buffered = io.BytesIO()
-            image.save(buffered, format="PNG")
-            img_str = base64.b64encode(buffered.getvalue()).decode()
-            st.session_state.background_image = img_str
-            st.session_state.bg_upload_trigger = False
-            st.rerun()
+    with col3:
+        # 上传背景按钮
+        if st.button("🎨 上传背景", key="bg_upload_btn", use_container_width=True):
+            # 这里不需要做任何事，文件上传器会自动处理
+            pass
+    
+    # 隐藏的背景图片上传器 - 必须始终在相同位置渲染
+    bg_image = st.file_uploader(
+        "上传背景图片",
+        type=['png', 'jpg', 'jpeg'],
+        key="bg_uploader",
+        label_visibility="collapsed"
+    )
+    
+    if bg_image is not None:
+        # 将背景图片转换为base64并存储在session state中
+        image = Image.open(bg_image)
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        st.session_state.background_image = img_str
+        st.rerun()
     
     # 清除背景按钮
     if st.session_state.background_image is not None:
