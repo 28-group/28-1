@@ -107,8 +107,8 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.2% !important;  /* 极窄间距 */
-        padding: 0 1% !important;  /* 减少左右内边距 */
+        gap: 0.1% !important;  /* 极窄间距 */
+        padding: 0 0.5% !important;  /* 减少左右内边距 */
         position: relative;
         z-index: 3;
     }
@@ -141,7 +141,7 @@ st.markdown(
     }
     
     .operator {
-        font-size: 2.5vw !important;  /* 缩小运算符 */
+        font-size: 2vw !important;  /* 进一步缩小运算符 */
         color: #6b7280;
         font-weight: 400;
         margin: 0 !important;
@@ -250,7 +250,7 @@ st.markdown('''
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 横向布局 - 压缩运算符列宽
-col1, col2, col3, col4, col5 = st.columns([1, 0.02, 1, 0.02, 1])
+col1, col2, col3, col4, col5 = st.columns([1, 0.01, 1, 0.01, 1])
 
 # 内容图片框
 with col1:
