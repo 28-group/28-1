@@ -265,7 +265,7 @@ def background_uploader():
     
     with col3:
         # 上传背景按钮
-        if st.button("🎨 上传背景", key="bg_upload_btn", use_container_width=True):
+        if st.button("上传背景", key="bg_upload_btn", use_container_width=True):
             # 这里不需要做任何事，文件上传器会自动处理
             pass
     
