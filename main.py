@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复按钮和覆盖图显示
+# 自定义CSS - 修复标题和说明显示问题，调整一键生成按钮样式
 st.markdown(
     """
     <style>
@@ -158,8 +158,9 @@ st.markdown(
         z-index: 3;
     }
     
+    /* 一键生成按钮样式 - 颜色改为黄色，其他参数与绿色按钮一致 */
     .generate-button {
-        background-color: #3b82f6;
+        background-color: #fbbf24; /* 黄色 */
         color: white;
         border: none;
         border-radius: 8px;
@@ -173,7 +174,7 @@ st.markdown(
     }
     
     .generate-button:hover {
-        background-color: #2563eb;
+        background-color: #d97706; /* 深黄色 hover 效果 */
         transform: translateY(-2px);
     }
     
@@ -195,35 +196,16 @@ st.markdown(
         z-index: 3 !important;
     }
     
-    /* 隐藏长条上传提示 */
-    .stFileUploader > div > div:first-child {
+    .stFileUploader label {
         display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
     }
     
-    .stFileUploader > div > button {
-        display: block !important;
-        visibility: visible !important;
-        background-color: #4CAF50 !important;
-        color: white !important;
+    .stFileUploader div {
         border: none !important;
-        border-radius: 5px !important;
-        padding: 6px 12px !important;
-        font-size: 0.9vw !important;
-        cursor: pointer !important;
-        margin: 10px auto 0 !important;
-    }
-    
-    .stFileUploader > div,
-    .stFileUploader {
-        border: none !important;
-        background: transparent !important;
+        background-color: transparent !important;
         padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        height: auto !important;
+        width: 75%;
+        height: 75%;
     }
     
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -236,81 +218,15 @@ st.markdown(
         max-height: 30%;
         object-fit: contain;
     }
-
-    /* 右上角按钮样式 */
-    .top-right-button {
-        position: fixed !important;
-        top: 20px !important;
-        right: 20px !important;
-        z-index: 4 !important;  /* 确保覆盖layer-1 */
-        background-color: #4CAF50 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 5px !important;
-        padding: 8px 16px !important;
-        font-size: 1vw !important;
-        cursor: pointer !important;
-    }
-
-    .top-right-button:hover {
-        background-color: #388E3C !important;
-    }
-
-    /* 覆盖层样式 */
-    .overlay-image {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        z-index: 2.5 !important;  /* 介于layer-1和layer-2之间 */
-        object-fit: cover !important;
-        opacity: 0.8 !important;
-    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# 初始化覆盖层图片状态
-if 'overlay_image' not in st.session_state:
-    st.session_state.overlay_image = None
-
 # 层级结构
 st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
-
-# 右上角上传按钮
-st.markdown(
-    f"""
-    <button class="top-right-button" onclick="document.getElementById('overlay-upload').click()">
-        上传覆盖图
-    </button>
-    """,
-    unsafe_allow_html=True
-)
-
-# 隐藏的文件上传组件（用于右上角按钮触发）
-overlay_upload = st.file_uploader(
-    "上传覆盖图",
-    type=['png', 'jpg', 'jpeg'],
-    key="overlay",
-    label_visibility="hidden",
-    on_change=lambda: st.session_state.update({"overlay_image": overlay_upload})
-)
-
-# 显示覆盖层图片
-if st.session_state.overlay_image:
-    image_bytes = st.session_state.overlay_image.read()
-    st.markdown(
-        f"""
-        <img src="data:image/jpeg;base64,{image_bytes}" class="overlay-image" id="overlay-img">
-        """,
-        unsafe_allow_html=True
-    )
-    # 重置文件读取指针
-    st.session_state.overlay_image.seek(0)
 
 # 标题区域 - 确保正确显示
 st.markdown('''
