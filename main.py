@@ -1,6 +1,7 @@
 import streamlit as st
 from PIL import Image
 import io
+import base64
 
 # 页面配置 - 使用宽屏布局
 st.set_page_config(
@@ -42,6 +43,30 @@ st.markdown(
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
+    /* 背景图片上传按钮样式 */
+    .bg-upload-btn {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        z-index: 100 !important;
+        background-color: #ff69b4 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 20px !important;
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .bg-upload-btn:hover {
+        background-color: #ff1493 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.3) !important;
+    }
+    
     /* 层级样式 */
     .layer-0 {
         background-color: #808080;
@@ -51,6 +76,9 @@ st.markdown(
         width: 100vw;
         height: 100vh;
         z-index: 1;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
     }
     
     .layer-1 {
@@ -222,8 +250,57 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# 初始化session state
+if 'result_image' not in st.session_state:
+    st.session_state.result_image = None
+if 'background_image' not in st.session_state:
+    st.session_state.background_image = None
+
+# 背景图片上传功能
+def background_uploader():
+    """背景图片上传组件"""
+    # 在右上角显示背景上传按钮
+    st.markdown(
+        '<button class="bg-upload-btn" onclick="window.parent.document.getElementById(\'bg_upload_trigger\').click()">🎨 上传背景</button>',
+        unsafe_allow_html=True
+    )
+    
+    # 隐藏的背景图片上传器
+    bg_image = st.file_uploader(
+        "上传背景图片",
+        type=['png', 'jpg', 'jpeg'],
+        key="bg_upload_trigger",
+        label_visibility="collapsed"
+    )
+    
+    if bg_image is not None:
+        # 将背景图片转换为base64并存储在session state中
+        image = Image.open(bg_image)
+        buffered = io.BytesIO()
+        image.save(buffered, format="PNG")
+        img_str = base64.b64encode(buffered.getvalue()).decode()
+        st.session_state.background_image = img_str
+        st.rerun()
+    
+    # 清除背景按钮
+    if st.session_state.background_image is not None:
+        if st.button("清除背景", key="clear_bg", help="清除背景图片"):
+            st.session_state.background_image = None
+            st.rerun()
+
+# 调用背景上传功能
+background_uploader()
+
+# 构建第一层级的背景样式
+if st.session_state.background_image is not None:
+    background_style = f'''
+    <div class="layer-0" style="background-image: url('data:image/png;base64,{st.session_state.background_image}')"></div>
+    '''
+else:
+    background_style = '<div class="layer-0"></div>'
+
 # 层级结构
-st.markdown('<div class="layer-0"></div>', unsafe_allow_html=True)
+st.markdown(background_style, unsafe_allow_html=True)
 st.markdown('<div class="layer-1"></div>', unsafe_allow_html=True)
 st.markdown('<div class="layer-2">', unsafe_allow_html=True)
 
@@ -328,7 +405,3 @@ st.markdown('''
 ''', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)  # 关闭layer-2
-
-# 初始化session state
-if 'result_image' not in st.session_state:
-    st.session_state.result_image = None
