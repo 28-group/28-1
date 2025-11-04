@@ -107,8 +107,8 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2%;
-        padding: 2%;
+        gap: 1%;
+        padding: 1%;
         position: relative;
         z-index: 3;
     }
