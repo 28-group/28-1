@@ -1,4 +1,4 @@
-import streamlit as st
+iimport streamlit as st
 from PIL import Image
 import io
 
@@ -159,7 +159,20 @@ st.markdown(
         border-top: 1px solid #f0f0f0;  /* 顶部边框线 */
     }
     
-    
+    /* 生成按钮样式 */
+    .generate-button {
+        background-color: #3b82f6;      /* 蓝色背景 */
+        color: white;                   /* 白色文字 */
+        border: none;                   /* 无边框 */
+        border-radius: 8px;             /* 圆角 */
+        padding: 0.8% 2%;              /* 内边距 */
+        font-size: 1.1vw;               /* 响应式字体大小 */
+        font-weight: 600;               /* 半粗体 */
+        cursor: pointer;                /* 手型光标 */
+        transition: all 0.3s ease;      /* 过渡动画效果 */
+        width: 25%;                     /* 宽度为容器的25% */
+        max-width: 100px;               /* 最大宽度限制 */
+    }
     
     /* 生成按钮悬停效果 */
     .generate-button:hover {
