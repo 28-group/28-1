@@ -77,11 +77,11 @@ st.markdown(
         top: 50%;                       /* 垂直居中 */
         left: 50%;                      /* 水平居中 */
         transform: translate(-50%, -50%); /* 精确居中定位 */
-        width: 10%;                     /* 宽度与第2层级一致 */？？？？*/
-        height: 10%;                    /* 高度与第2层级一致 */？？？？*/
+        width: 70%;                     /* 宽度与第2层级一致 */
+        height: 70%;                    /* 高度与第2层级一致 */
         z-index: 3;                     /* 层级为3（最上层） */
         padding: 2%;                    /* 内边距 */
-        
+        display: flex;                  /* 弹性布局 */
         flex-direction: column;         /* 垂直方向排列 */
         background-color: transparent;  /* 完全透明背景 */
         pointer-events: auto;           /* 确保可以接收鼠标事件 */
@@ -170,7 +170,7 @@ st.markdown(
         font-weight: 600;               /* 半粗体 */
         cursor: pointer;                /* 手型光标 */
         transition: all 0.3s ease;      /* 过渡动画效果 */
-        width: 25%;                     /* 宽度为容器的25% */
+        width: 10%;                     /* 宽度为容器的25% */
         max-width: 100px;               /* 最大宽度限制 */
     }
     
