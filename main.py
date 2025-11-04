@@ -10,11 +10,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 保持原有样式，仅调整必要部分
+# 自定义CSS - 确保三个框大小一致
 st.markdown(
     """
     <style>
-    /* 彻底禁止页面滑动 */
+    /* 基础样式保持不变 */
     html, body, #root, [data-testid="stAppViewContainer"] {
         height: 100vh !important;
         width: 100vw !important;
@@ -37,7 +37,6 @@ st.markdown(
         padding: 0 !important;
     }
     
-    /* 隐藏Streamlit默认元素 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -106,16 +105,18 @@ st.markdown(
         flex: 1;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start; /* 顶部对齐确保框高度一致 */
         gap: 2%;
         padding: 2%;
         position: relative;
         z-index: 3;
+        margin-top: 2%; /* 增加顶部间距 */
     }
     
+    /* 关键修改：确保三个图片框大小完全一致 */
     .image-box {
         width: 35%;
-        aspect-ratio: 2/3;
+        aspect-ratio: 2/3; /* 固定宽高比 */
         border: 2px dashed #4CAF50;
         border-radius: 10px;
         display: flex;
@@ -126,6 +127,7 @@ st.markdown(
         transition: all 0.3s ease;
         padding: 1%;
         position: relative;
+        min-height: 300px; /* 最小高度确保一致性 */
     }
     
     .image-box:hover {
@@ -144,8 +146,10 @@ st.markdown(
         font-size: 4vw;
         color: #6b7280;
         font-weight: 400;
+        margin-top: 30%; /* 运算符垂直居中 */
     }
     
+    /* 其他样式保持不变 */
     .button-container {
         display: flex;
         justify-content: center;
@@ -175,7 +179,6 @@ st.markdown(
         transform: translateY(-2px);
     }
     
-    /* 底部说明 */
     .footer {
         text-align: center;
         color: #6b7280;
@@ -187,7 +190,6 @@ st.markdown(
         border-top: 1px solid #f0f0f0;
     }
     
-    /* 确保组件可见 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
         z-index: 3 !important;
@@ -238,7 +240,7 @@ st.markdown('<div class="image-container">', unsafe_allow_html=True)
 # 横向布局
 col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
 
-# 内容图片框
+# 内容图片框（保持不变）
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     content_image = st.file_uploader(
@@ -258,12 +260,19 @@ with col1:
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 内容图片文字
+    st.markdown('''
+    <div style="text-align: center; margin-top: 8px;">
+        <div class="box-text">内容图片</div>
+    </div>
+    ''', unsafe_allow_html=True)
 
 # 加号
 with col2:
     st.markdown('<div class="operator">+</div>', unsafe_allow_html=True)
 
-# 风格图片框
+# 风格图片框（保持不变）
 with col3:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
     style_image = st.file_uploader(
@@ -283,30 +292,22 @@ with col3:
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # 风格图片文字
+    st.markdown('''
+    <div style="text-align: center; margin-top: 8px;">
+        <div class="box-text">风格图片</div>
+    </div>
+    ''', unsafe_allow_html=True)
 
 # 等号
 with col4:
     st.markdown('<div class="operator">=</div>', unsafe_allow_html=True)
 
-# 结果图片框 - 调整按钮和文字位置（按钮在上，文字在下）
+# 结果图片框 - 修正顺序：图片框 → 按钮 → 文字
 with col5:
     with st.container():
-        # 先显示按钮
-        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
-        with col_btn2:
-            if st.button("一键生成", key="generate_btn", use_container_width=True):
-                if content_image and style_image:
-                    with st.spinner("正在生成融合图片..."):
-                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
-                        st.success("风格融合完成！")
-                        st.rerun()
-                else:
-                    st.warning("请先上传内容图片和风格图片")
-        
-        # 按钮与图片框之间的间距
-        st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
-        
-        # 再显示图片框
+        # 1. 结果图片框（与其他框大小一致）
         st.markdown('<div class="image-box">', unsafe_allow_html=True)
         if 'result_image' in st.session_state and st.session_state.result_image:
             st.image(st.session_state.result_image, caption="融合结果")
@@ -319,7 +320,22 @@ with col5:
             ''', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
-        # 最后显示"融合结果"文字（在图片框下方）
+        # 间距
+        st.markdown('<div style="height: 15px;"></div>', unsafe_allow_html=True)
+        
+        # 2. 一键生成按钮（在图片框下方）
+        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+        with col_btn2:
+            if st.button("一键生成", key="generate_btn", use_container_width=True):
+                if content_image and style_image:
+                    with st.spinner("正在生成融合图片..."):
+                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
+                        st.success("风格融合完成！")
+                        st.rerun()
+                else:
+                    st.warning("请先上传内容图片和风格图片")
+        
+        # 3. 融合结果文字（在按钮下方）
         st.markdown('''
         <div style="text-align: center; margin-top: 8px;">
             <div class="box-text">融合结果</div>
