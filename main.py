@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题
+# 自定义CSS - 缩小间距并协调运算符位置
 st.markdown(
     """
     <style>
@@ -107,8 +107,8 @@ st.markdown(
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 2%;
-        padding: 2%;
+        gap: 1%;  /* 间隔缩小为原来的一半 */
+        padding: 1%;  /* 内边距同步缩小 */
         position: relative;
         z-index: 3;
     }
@@ -141,9 +141,10 @@ st.markdown(
     }
     
     .operator {
-        font-size: 4vw;
+        font-size: 3vw;  /* 运算符适当缩小以配合间距 */
         color: #6b7280;
         font-weight: 400;
+        text-align: center;  /* 确保运算符居中 */
     }
     
     .button-container {
@@ -235,8 +236,8 @@ st.markdown('''
 # 图片框容器
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
-# 横向布局
-col1, col2, col3, col4, col5 = st.columns([1, 0.05, 1, 0.05, 1])
+# 横向布局 - 调整列宽比例，缩小运算符所在列的宽度
+col1, col2, col3, col4, col5 = st.columns([1, 0.03, 1, 0.03, 1])  # 运算符列宽从0.05缩小到0.03
 
 # 内容图片框
 with col1:
