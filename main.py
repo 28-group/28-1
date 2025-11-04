@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题，重点调整图片显示样式
+# 自定义CSS - 重点调整上传组件和图片框的层级、布局
 st.markdown(
     """
     <style>
@@ -192,10 +192,15 @@ st.markdown(
         border-top: 1px solid #f0f0f0;
     }
     
-    /* 确保组件可见 */
-    .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
-        position: relative !important;
-        z-index: 5 !important; /* 提高上传组件和图片的层级 */
+    /* 确保上传组件和图片在图片框内正确显示 */
+    .stFileUploader {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        opacity: 1 !important; /* 保持上传组件可见，便于交互 */
+        z-index: 6 !important; /* 最高层级，确保覆盖图片框 */
     }
     
     .stFileUploader label {
@@ -210,18 +215,20 @@ st.markdown(
         height: 100% !important;
     }
     
+    .stImage {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        max-width: 95% !important;
+        max-height: 95% !important;
+        object-fit: contain !important;
+        z-index: 5 !important; /* 图片在上传组件下方，文字上方 */
+    }
+    
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
         position: relative !important;
         z-index: 3 !important;
-    }
-    
-    /* 调整图片大小和位置，使其完全在图片框内 */
-    img {
-        max-width: 95% !important;  /* 调整为框内95%宽度 */
-        max-height: 95% !important; /* 调整为框内95%高度 */
-        object-fit: contain !important;
-        display: block !important;
-        margin: 0 auto !important; /* 居中显示 */
     }
     </style>
     """,
@@ -260,10 +267,7 @@ with col1:
         st.image(image)
     else:
         st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
-            <div class="box-text">内容图片</div>
-        </div>
+        <div class="box-text">内容图片</div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -285,10 +289,7 @@ with col3:
         st.image(image)
     else:
         st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-            <div style="font-size: 3vw; color: #4CAF50;"></div>
-            <div class="box-text">风格图片</div>
-        </div>
+        <div class="box-text">风格图片</div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -304,10 +305,7 @@ with col5:
             st.image(st.session_state.result_image, caption="融合结果")
         else:
             st.markdown('''
-            <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                <div style="font-size: 3vw; color: #4CAF50;"></div>
-                <div class="box-text">融合结果</div>
-            </div>
+            <div class="box-text">融合结果</div>
             ''', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         
@@ -318,7 +316,6 @@ with col5:
             if st.button("一键生成", key="generate_btn", use_container_width=True):
                 if content_image and style_image:
                     with st.spinner("正在生成融合图片..."):
-                        # 这里使用了更合适比例的占位图
                         st.session_state.result_image = "https://via.placeholder.com/400x600/4CAF50/FFFFFF?text=融合结果"
                         st.success("风格融合完成！")
                         st.rerun()
