@@ -238,7 +238,7 @@ st.markdown('''
 st.markdown('<div class="image-container">', unsafe_allow_html=True)
 
 # 横向布局
-col1, col2, col3, col4, col5 = st.columns([1, 0.03, 1, 0.03, 1])
+col1, col2, col3, col4, col5 = st.columns([1, 0.04, 1, 0.04, 1])
 
 # 内容图片框
 with col1:
