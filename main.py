@@ -10,7 +10,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 自定义CSS - 修复标题和说明显示问题
+# 自定义CSS - 修复标题和说明显示问题，重点调整图片显示样式
 st.markdown(
     """
     <style>
@@ -126,6 +126,7 @@ st.markdown(
         transition: all 0.3s ease;
         padding: 1%;
         position: relative;
+        overflow: hidden; /* 确保图片不会超出框外 */
     }
     
     .image-box:hover {
@@ -138,6 +139,8 @@ st.markdown(
         font-size: 1vw;
         text-align: center;
         margin-top: 8px;
+        position: relative;
+        z-index: 5; /* 确保文字在图片上方 */
     }
     
     .operator {
@@ -192,7 +195,7 @@ st.markdown(
     /* 确保组件可见 */
     .stFileUploader, .stButton, .stImage, .stSpinner, .stSuccess, .stWarning {
         position: relative !important;
-        z-index: 3 !important;
+        z-index: 5 !important; /* 提高上传组件和图片的层级 */
     }
     
     .stFileUploader label {
@@ -203,8 +206,8 @@ st.markdown(
         border: none !important;
         background-color: transparent !important;
         padding: 0 !important;
-        width: 75%;
-        height: 75%;
+        width: 100% !important;
+        height: 100% !important;
     }
     
     .stColumn, [data-testid="stVerticalBlock"], [data-testid="stHorizontalBlock"] {
@@ -212,10 +215,13 @@ st.markdown(
         z-index: 3 !important;
     }
     
+    /* 调整图片大小和位置，使其完全在图片框内 */
     img {
-        max-width: 30%;  /* 调整图片大小确保可见 */
-        max-height: 30%;
-        object-fit: contain;
+        max-width: 95% !important;  /* 调整为框内95%宽度 */
+        max-height: 95% !important; /* 调整为框内95%高度 */
+        object-fit: contain !important;
+        display: block !important;
+        margin: 0 auto !important; /* 居中显示 */
     }
     </style>
     """,
@@ -312,7 +318,8 @@ with col5:
             if st.button("一键生成", key="generate_btn", use_container_width=True):
                 if content_image and style_image:
                     with st.spinner("正在生成融合图片..."):
-                        st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
+                        # 这里使用了更合适比例的占位图
+                        st.session_state.result_image = "https://via.placeholder.com/400x600/4CAF50/FFFFFF?text=融合结果"
                         st.success("风格融合完成！")
                         st.rerun()
                 else:
