@@ -243,20 +243,20 @@ col1, col2, col3, col4, col5 = st.columns([1, 0.04, 1, 0.04, 1])
 # 内容图片框
 with col1:
     st.markdown('<div class="image-box">', unsafe_allow_html=True)
-    content_file = st.file_uploader(
-        "",  # 移除标签
+    content_image = st.file_uploader(
+        "内容图片",
         type=['png', 'jpg', 'jpeg'],
         key="content",
-        label_visibility="hidden"  # 隐藏标签
+        label_visibility="collapsed"
     )
-    if content_file:
-        image = Image.open(content_file)
-        st.image(image, use_column_width=True)
+    if content_image:
+        image = Image.open(content_image)
+        st.image(image)
     else:
-        # 只保留小按钮，去掉大按钮
         st.markdown('''
-        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
-            <button class="upload-button">Browse files</button>
+        <div style="text-align: center; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="font-size: 3vw; color: #4CAF50;"></div>
+            <div class="box-text">内容图片</div>
         </div>
         ''', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
@@ -310,7 +310,7 @@ with col5:
         col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
         with col_btn2:
             if st.button("一键生成", key="generate_btn", use_container_width=True):
-                if content_file and style_image:
+                if content_image and style_image:
                     with st.spinner("正在生成融合图片..."):
                         st.session_state.result_image = "https://via.placeholder.com/400x300/4CAF50/FFFFFF?text=融合结果"
                         st.success("风格融合完成！")
