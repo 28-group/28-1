@@ -192,8 +192,8 @@ st.markdown(
         border: none !important;        /* 无边框 */
         background-color: transparent !important;  /* 透明背景 */
         padding: 0 !important;          /* 无内边距 */
-        width: 100% !important;         /* 修改：宽度100% */
-        height: 100% !important;        /* 修改：高度100% */
+        width: 75% !important;         /* 修改：宽度75% */
+        height: 75% !important;        /* 修改：高度75% */
         display: flex !important;       /* 新增：弹性布局 */
         justify-content: center !important;  /* 新增：水平居中 */
         align-items: center !important; /* 新增：垂直居中 */
